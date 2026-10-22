@@ -27,6 +27,8 @@ import type {} from '@deepseek-ai/dsh-system-prompt'
 import type {} from '@deepseek-ai/dsh-agent'
 import type {} from '@deepseek-ai/dsh-agent-preset-registry'
 
+import { DEFAULT_PERSONA } from './presets.ts'
+
 /** Cordis 插件名。 */
 export const name = 'assistant-profile'
 
@@ -43,23 +45,27 @@ const PERSONA_PLUGIN_NAME = '@deepseek-ai/dsh-persona'
 export interface Config {
   /** 助理名：进提示词，也是侧栏「新会话」上方的显示名。 */
   name: Volatile<string>
-  /** 一句话风格：作 `Style:` 一行加在人格前面。 */
-  style: Volatile<string>
   /** 回复语言：作 `Reply in … throughout.` 一行。 */
   language: Volatile<string>
   /** 人格提示词正文，原样注入。 */
   persona: Volatile<string>
+  /**
+   * 用户「另存」的自定义人格，JSON 数组序列化成字符串存取——设置通道对
+   * 标量字段最稳，嵌套结构交给客户端自己 parse。
+   */
+  customsJson: Volatile<string>
 }
 
 /**
- * 运行时 schema。四个字段都是 volatile：它们由「助理档案」页而不是插件配置页编辑，
- * 改动经设置通道写回 profile 的 patch，重启后仍在。
+ * 运行时 schema。字段都是 volatile：它们由「助理档案」页而不是插件配置页编辑，
+ * 改动经设置通道写回 profile 的 patch，重启后仍在。默认值取内置「默认三」，
+ * 所以装好就是一条带人设的鱼；三栏全部清空再保存，则什么都不注入。
  */
 export const Config: z<Config> = z.object({
-  name: z.string().default('大肥鱼').volatile(),
-  style: z.string().default('').volatile(),
-  language: z.string().default('中文').volatile(),
-  persona: z.string().default('').volatile(),
+  name: z.string().default(DEFAULT_PERSONA.name).volatile(),
+  language: z.string().default(DEFAULT_PERSONA.language).volatile(),
+  persona: z.string().default(DEFAULT_PERSONA.persona).volatile(),
+  customsJson: z.string().default('[]').volatile(),
 })
 
 /** 跨插件重载共享的当前配置引用：旧闭包也能读到新值。 */
@@ -105,12 +111,10 @@ export function renderPersona(): string {
   const config = live.config
   if (config === undefined) return ''
   const name = text(config.name.get())
-  const style = text(config.style.get())
   const language = text(config.language.get())
   const persona = text(config.persona.get())
   const lines = [
     ...name === undefined ? [] : [`Your name is ${name}.`],
-    ...style === undefined ? [] : [`Style: ${style}`],
     ...language === undefined ? [] : [`Reply in ${language} throughout.`],
     ...persona === undefined ? [] : [persona],
   ]

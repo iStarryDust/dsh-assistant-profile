@@ -1,8 +1,12 @@
 /**
- * 助理档案页：名称、风格、语言、人格提示词四段，一次保存原子落盘。
+ * 助理档案页：名称、语言、人格提示词三段，一次保存原子落盘。
  *
  * 页面只编辑、不预览：真正的注入发生在宿主侧（每个新会话的系统提示首段），
  * 这里把「它会出现在哪里」写在每个字段的说明里，省掉一块会随时间漂移的假预览。
+ *
+ * 「保存」行左侧是人格预设：三个内置（默认一/二/三，点击即整套应用并保存）加
+ * 「另存」出来的自定义（名字取自「名称」，胶囊右侧带一个小删除钮）。装好默认用
+ * 默认三；预设多到一行放不下时横向滚动，不换行不挤压。
  */
 
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react'
@@ -10,6 +14,7 @@ import { Button, Input } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
+import { BUILTIN_PERSONAS } from '../presets.ts'
 import type { ProfileStore, ProfileValues } from './store.ts'
 import css from './ProfilePage.module.css'
 
@@ -31,8 +36,8 @@ export type ProfilePageProps =
   & PropsLocale<'assistantProfile'>
   & InjectFace<ProfilePageInjected>
 
-/** 四个字段的遍历顺序。 */
-const FIELDS = ['name', 'style', 'language', 'persona'] as const
+/** 三段的遍历顺序。 */
+const FIELDS = ['name', 'language', 'persona'] as const
 
 /**
  * 渲染助理档案页。
@@ -44,11 +49,14 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
   // 草稿只在真正改过之后才存在：保存成功后丢弃它，页面回到 Host 的值。
   const [draft, setDraft] = useState<ProfileValues | undefined>(undefined)
   const [saved, setSaved] = useState(false)
+  const [notice, setNotice] = useState<string | undefined>(undefined)
   const values = draft ?? snapshot.values
   const dirty = draft !== undefined && FIELDS.some(field => draft[field] !== snapshot.values[field])
   const length = useMemo(() => Array.from(values.persona).length, [values.persona])
   const ready = snapshot.status === 'ready'
-  const canSave = ready && snapshot.writable && dirty && !snapshot.pending
+  const writable = ready && snapshot.writable
+  const busy = snapshot.pending
+  const canSave = writable && dirty && !busy
 
   // 「已保存」是一次短提示，不是状态：第一次改动或下一次保存前自动消失。
   useEffect(() => {
@@ -60,6 +68,7 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
   const patch = (next: Partial<ProfileValues>): void => {
     setDraft({ ...values, ...next })
     setSaved(false)
+    setNotice(undefined)
   }
 
   const submit = async (): Promise<void> => {
@@ -71,7 +80,39 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
     }
   }
 
-  const status = (): { text: string; error: boolean } => {
+  /** 点一个预设 = 整套应用 + 立即保存：切换人格是一步，不该再多一次「记得保存」。 */
+  const applyPreset = async (preset: ProfileValues): Promise<void> => {
+    if (!writable || busy) return
+    setDraft(preset)
+    const result = await profile.save(preset)
+    if (result.ok) {
+      setDraft(undefined)
+      setSaved(true)
+      setNotice(undefined)
+    }
+  }
+
+  /** 「另存」：以「名称」为名，把当前三段存成一份自定义人格。 */
+  const saveAs = async (): Promise<void> => {
+    const name = values.name.trim()
+    if (name === '') {
+      setNotice(t('saveas.needName'))
+      return
+    }
+    if (!writable || busy) return
+    const result = await profile.saveCustom({ name, language: values.language, persona: values.persona })
+    if (result.ok) {
+      setSaved(true)
+      setNotice(undefined)
+    }
+  }
+
+  /** 当前三段和某份预设完全一致时，胶囊才算选中。 */
+  const isActive = (candidate: ProfileValues): boolean =>
+    FIELDS.every(field => values[field] === candidate[field])
+
+  const line = (): { text: string; error: boolean } => {
+    if (notice !== undefined) return { text: notice, error: true }
     if (!ready) return { text: t('unavailable'), error: false }
     if (!snapshot.writable) return { text: t('readonly'), error: false }
     if (snapshot.failure !== undefined) return { text: `${t('failed')} · ${snapshot.failure}`, error: true }
@@ -79,7 +120,7 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
     if (dirty) return { text: t('dirty'), error: false }
     return { text: '', error: false }
   }
-  const line = status()
+  const status = line()
 
   return (
     <div className={css.page}>
@@ -120,18 +161,6 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
           </div>
 
           <label className={css.field}>
-            <span className={css.label}>{t('style.label')}</span>
-            <Input
-              className={css.control}
-              value={values.style}
-              placeholder={t('style.placeholder')}
-              spellCheck={false}
-              onChange={(event) => { patch({ style: event.target.value }) }}
-            />
-            <span className={css.hint}>{t('style.hint')}</span>
-          </label>
-
-          <label className={css.field}>
             <span className={css.label}>{t('persona.label')}</span>
             <div className={css.textareaWrap}>
               <textarea
@@ -150,17 +179,66 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
             </span>
           </label>
 
+          {status.text !== '' && (
+            <p className={status.error ? `${css.status} ${css.statusError}` : css.status}>{status.text}</p>
+          )}
+
           <footer className={css.footer}>
-            <span className={line.error ? `${css.status} ${css.statusError}` : css.status}>{line.text}</span>
+            <div className={css.presets} role="group">
+              {BUILTIN_PERSONAS.map((preset, index) => {
+                const candidate: ProfileValues = { name: preset.name, language: preset.language, persona: preset.persona }
+                const active = isActive(candidate)
+                const label = index === 0 ? t('preset.builtin1') : index === 1 ? t('preset.builtin2') : t('preset.builtin3')
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    className={active ? `${css.chip} ${css.chipActive}` : css.chip}
+                    aria-pressed={active}
+                    disabled={!writable || busy}
+                    onClick={() => { void applyPreset(candidate) }}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
+              {snapshot.customs.map(custom => {
+                const candidate: ProfileValues = { name: custom.name, language: custom.language, persona: custom.persona }
+                const active = isActive(candidate)
+                return (
+                  <span key={custom.name} className={css.custom}>
+                    <button
+                      type="button"
+                      className={active ? `${css.chip} ${css.chipActive}` : css.chip}
+                      aria-pressed={active}
+                      disabled={!writable || busy}
+                      onClick={() => { void applyPreset(candidate) }}
+                    >
+                      {custom.name}
+                    </button>
+                    <button
+                      type="button"
+                      className={css.customDelete}
+                      aria-label={`${t('custom.delete')}：${custom.name}`}
+                      title={`${t('custom.delete')}：${custom.name}`}
+                      disabled={!writable || busy}
+                      onClick={() => { void profile.removeCustom(custom.name) }}
+                    >
+                      ×
+                    </button>
+                  </span>
+                )
+              })}
+            </div>
             <Button
               variant="ghost"
-              disabled={!dirty || snapshot.pending}
-              onClick={() => { setDraft(undefined); setSaved(false) }}
+              disabled={!writable || busy || values.name.trim() === ''}
+              onClick={() => { void saveAs() }}
             >
-              {t('reset')}
+              {t('saveas')}
             </Button>
             <Button variant="primary" type="submit" disabled={!canSave}>
-              {snapshot.pending ? t('saving') : t('save')}
+              {busy ? t('saving') : t('save')}
             </Button>
           </footer>
         </form>

@@ -1,6 +1,6 @@
 # Assistant Profile · dsh-assistant-profile
 
-One **global persona** for DeepSeek Harness: name, style, language, and persona prompt. Install it once and every new session opens with it at the very top of the system prompt. The sidebar shows the assistant's name above New Session.
+One **global persona** for DeepSeek Harness: name, language, and persona prompt. Install it once and every new session opens with it at the very top of the system prompt. The sidebar shows the assistant's name above New Session.
 
 One profile, all four modes (standard / PTC / minimal / creator). No preset duplication, no mode-picker override.
 
@@ -14,8 +14,6 @@ The injected text looks like this (blank-line separated, each part optional):
 
 ```
 Your name is 大肥鱼.
-
-Style: 冷静、精确，先给结论
 
 Reply in 简体中文 throughout.
 
@@ -43,7 +41,8 @@ On a route without it (the default `deepseek-v4-pro` entry, for example) a mid-s
 ## UI
 
 - A new **Assistant Profile** row in the sidebar, right below Plugins (order 5).
-- It opens a main-area page: name, language, style, persona prompt, a live character counter (turns warning-coloured past 2000), and Save / Discard with a status line.
+- It opens a main-area page: name, language, persona prompt, a live character counter (turns warning-coloured past 2000).
+- Left of Save sits the persona row: **Default 1 / 2 / 3** (click applies and saves in one step) plus "Save as" copies (named after the Name field, each with a small delete button); a fresh install starts on Default 3, and the row scrolls horizontally when it overflows.
 - Above the New Session button: a quiet name row (first-character chip + name). It hides when the sidebar collapses to the 56px rail and updates as soon as a new name is saved.
 - Defaults: name `大肥鱼`, language `中文`.
 
@@ -56,7 +55,6 @@ The four fields are this plugin's profile config, read and written through the o
   name: '@istarry/dsh-assistant-profile'
   config:
     name: 小星
-    style: 冷静、精确，先给结论
     language: 简体中文
     persona: 你是一个只讲证据的助理。不确定就说不确定。
 ```
@@ -68,7 +66,7 @@ It travels with the profile: another profile is another persona; backing up the 
 ```bash
 dsh plugin --profile <profile> add @istarry/dsh-assistant-profile
 # local tarball:
-dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.1.1.tgz
+dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.2.0.tgz
 ```
 
 Restart DSH. To remove:
@@ -100,5 +98,5 @@ Edit `src/` only; artifacts are generated.
 
 - Top-level sessions only; subagents are never injected.
 - When the preset registry cannot be read, injection degrades to a plain section (no `complete` mirroring) and logs nothing.
-- Name / language / style are three structural prompt lines; if you want the model to call itself something else, just write it in the persona too.
+- Saving with all three fields cleared injects nothing (native identity); a fresh install carries the Default 3 content.
 - The nameplate is a DOM node inserted before the New Session button (the shell exposes no slot there); a MutationObserver puts it back if a re-render drops it.

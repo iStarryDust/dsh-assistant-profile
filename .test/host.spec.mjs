@@ -36,7 +36,7 @@ const MINIMAL = `- id: persona
 /** 造一个档案配置（字段是 ref：`.get()` 读当前值）。 */
 function config(values) {
   const ref = key => ({ get: () => values[key] ?? '' })
-  return { name: ref('name'), style: ref('style'), language: ref('language'), persona: ref('persona') }
+  return { name: ref('name'), language: ref('language'), persona: ref('persona') }
 }
 
 /** 造一个宿主上下文替身。 */
@@ -105,7 +105,7 @@ const DOCUMENTS = { standard: STANDARD, minimal: MINIMAL, broken: 'not: a list' 
 // 1. 标准模式：遮蔽段的名字/位置对，complete 不出现，四段文本按序拼好。
 {
   const h = harness(DOCUMENTS)
-  apply(h.ctx, config({ name: '大肥鱼', style: '冷静、精确', language: '简体中文', persona: '你在意证据。' }))
+  apply(h.ctx, config({ name: '大肥鱼', language: '简体中文', persona: '你在意证据。' }))
   const agentCtx = h.agentCtxFor()
   await h.created(agentCtx)
   assert.equal(agentCtx.sections.length, 1, '标准模式应注册一个遮蔽段')
@@ -115,15 +115,15 @@ const DOCUMENTS = { standard: STANDARD, minimal: MINIMAL, broken: 'not: a list' 
   assert.equal(section.complete, undefined, '标准模式不该标 complete')
   assert.equal(
     section.text(),
-    'Your name is 大肥鱼.\n\nStyle: 冷静、精确\n\nReply in 简体中文 throughout.\n\n你在意证据。',
+    'Your name is 大肥鱼.\n\nReply in 简体中文 throughout.\n\n你在意证据。',
   )
-  console.log('✓ 标准模式：名字/风格/语言/人格四段就位，未标 complete')
+  console.log('✓ 标准模式：名字/语言/人格三段就位，未标 complete')
 }
 
 // 2. 极简模式：镜像预设的 complete，文本仍是档案。
 {
   const h = harness(DOCUMENTS)
-  apply(h.ctx, config({ name: '大肥鱼', style: '', language: '中文', persona: '只说结论。' }))
+  apply(h.ctx, config({ name: '大肥鱼', language: '中文', persona: '只说结论。' }))
   h.presetFor.current = 'minimal'
   const agentCtx = h.agentCtxFor()
   await h.created(agentCtx)
@@ -136,7 +136,7 @@ const DOCUMENTS = { standard: STANDARD, minimal: MINIMAL, broken: 'not: a list' 
 // 3. 空档案：回落到预设原文，等于原生行为。
 {
   const h = harness(DOCUMENTS)
-  apply(h.ctx, config({ name: '', style: '', language: '', persona: '' }))
+  apply(h.ctx, config({ name: '', language: '', persona: '' }))
   const agentCtx = h.agentCtxFor()
   await h.created(agentCtx)
   assert.equal(agentCtx.sections[0].text(), 'You are a coding agent powered by the {{model}} model.')
@@ -146,7 +146,7 @@ const DOCUMENTS = { standard: STANDARD, minimal: MINIMAL, broken: 'not: a list' 
 // 4. 子智能体：一律不碰。
 {
   const h = harness(DOCUMENTS)
-  apply(h.ctx, config({ name: '大肥鱼', style: '', language: '中文', persona: 'x' }))
+  apply(h.ctx, config({ name: '大肥鱼', language: '中文', persona: 'x' }))
   const agentCtx = h.agentCtxFor()
   await h.created(agentCtx, { origin: 'subagent' })
   assert.equal(agentCtx.sections.length, 0, '子智能体不该被注入')
@@ -156,7 +156,7 @@ const DOCUMENTS = { standard: STANDARD, minimal: MINIMAL, broken: 'not: a list' 
 // 5. 预设读不到：照常注入，只是不镜像 complete。
 {
   const h = harness(DOCUMENTS)
-  apply(h.ctx, config({ name: '大肥鱼', style: '', language: '中文', persona: '在。' }))
+  apply(h.ctx, config({ name: '大肥鱼', language: '中文', persona: '在。' }))
   h.presetFor.current = 'missing'
   const agentCtx = h.agentCtxFor()
   await h.created(agentCtx)
@@ -168,12 +168,12 @@ const DOCUMENTS = { standard: STANDARD, minimal: MINIMAL, broken: 'not: a list' 
 // 6. 同一个 agent 上重装（插件热重载）：旧监听先注销，旧段被收回，只留一个。
 {
   const h = harness(DOCUMENTS)
-  apply(h.ctx, config({ name: '一号', style: '', language: '中文', persona: '' }))
+  apply(h.ctx, config({ name: '一号', language: '中文', persona: '' }))
   const agentCtx = h.agentCtxFor()
   await h.created(agentCtx)
   const first = agentCtx.sections[0]
   h.reload()
-  apply(h.ctx, config({ name: '二号', style: '', language: '中文', persona: '' }))
+  apply(h.ctx, config({ name: '二号', language: '中文', persona: '' }))
   await h.created(agentCtx)
   assert.equal(first.disposed, true, '旧段应被收回')
   assert.equal(agentCtx.sections.at(-1).text(), 'Your name is 二号.\n\nReply in 中文 throughout.')
@@ -183,9 +183,9 @@ const DOCUMENTS = { standard: STANDARD, minimal: MINIMAL, broken: 'not: a list' 
 // 7. 实时生效：文本每次求值，改配置后同一个段立刻返回新值。
 {
   const h = harness(DOCUMENTS)
-  const values = { name: '一号', style: '', language: '中文', persona: '' }
+  const values = { name: '一号', language: '中文', persona: '' }
   const ref = key => ({ get: () => values[key] })
-  apply(h.ctx, { name: ref('name'), style: ref('style'), language: ref('language'), persona: ref('persona') })
+  apply(h.ctx, { name: ref('name'), language: ref('language'), persona: ref('persona') })
   const agentCtx = h.agentCtxFor()
   await h.created(agentCtx)
   values.persona = '换了人格。'
@@ -196,7 +196,7 @@ const DOCUMENTS = { standard: STANDARD, minimal: MINIMAL, broken: 'not: a list' 
 // 8. 空白会话换模式：按新预设重登记，把 complete 补上。
 {
   const h = harness(DOCUMENTS)
-  apply(h.ctx, config({ name: '小星', style: '', language: '中文', persona: '只讲证据。' }))
+  apply(h.ctx, config({ name: '小星', language: '中文', persona: '只讲证据。' }))
   const agentCtx = h.agentCtxFor()
   h.agents.set('session-x', { id: 'session-x', ctx: agentCtx, session: { header: {} } })
   await h.created(agentCtx)

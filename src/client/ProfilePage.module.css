@@ -130,6 +130,17 @@
   color: var(--dsw-alias-state-warn-label);
 }
 
+.status {
+  margin: 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-tertiary);
+}
+
+.statusError {
+  color: var(--dsw-alias-state-error-primary);
+}
+
 .footer {
   display: flex;
   align-items: center;
@@ -137,19 +148,85 @@
   padding-top: 2px;
 }
 
-.status {
+/* 预设胶囊排成一行，放不下就横向滚动：行高稳定，多了也不挤压「另存 / 保存」。 */
+.presets {
+  display: flex;
   flex: 1;
   min-width: 0;
-  font-size: 12px;
-  line-height: 18px;
-  color: var(--dsw-alias-label-tertiary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
-.statusError {
+.chip {
+  flex: none;
+  padding: 3px 10px;
+  border: 0.5px solid var(--dsw-alias-border-l3);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  line-height: 18px;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+}
+
+.chip:hover:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.chip:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.chipActive {
+  border-color: var(--dsw-static-neutral-bluish-400);
+  background: var(--dsw-alias-bg-module-platform);
+  color: var(--dsw-alias-label-primary);
+}
+
+/* 自定义人格 = 名字胶囊 + 同壳的小删除钮。 */
+.custom {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  border: 0.5px solid var(--dsw-alias-border-l3);
+  border-radius: 999px;
+  background: transparent;
+  transition: background .12s, border-color .12s;
+}
+
+.custom:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.custom .chip {
+  border: none;
+  border-radius: 999px 0 0 999px;
+  padding-right: 4px;
+}
+
+.customDelete {
+  padding: 3px 8px 3px 2px;
+  border: none;
+  border-radius: 0 999px 999px 0;
+  background: transparent;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 13px;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.customDelete:hover:not(:disabled) {
   color: var(--dsw-alias-state-error-primary);
+}
+
+.customDelete:disabled {
+  cursor: default;
+  opacity: 0.55;
 }
 
 /* ── 侧栏名plate：插在「新会话」按钮上方，一行居中的名字 ─────────────────── */
