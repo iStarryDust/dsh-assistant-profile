@@ -87,33 +87,6 @@
   width: 100%;
 }
 
-.chips {
-  display: flex;
-  gap: 6px;
-}
-
-.chip {
-  padding: 2px 9px;
-  border: 0.5px solid var(--dsw-alias-border-l3);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--dsw-alias-label-secondary);
-  font-size: 12px;
-  line-height: 18px;
-  cursor: pointer;
-  transition: background .12s, border-color .12s, color .12s;
-}
-
-.chip:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
-}
-
-.chipActive {
-  border-color: var(--dsw-static-neutral-bluish-400);
-  background: var(--dsw-alias-bg-module-platform);
-  color: var(--dsw-alias-label-primary);
-}
-
 .textareaWrap {
   position: relative;
 }
@@ -179,17 +152,17 @@
   color: var(--dsw-alias-state-error-primary);
 }
 
-/* ── 侧栏名plate：插在「新会话」按钮上方 ─────────────────────────────────── */
+/* ── 侧栏名plate：插在「新会话」按钮上方，一行居中的名字 ─────────────────── */
 
 .nameplate {
   display: flex;
   flex: none;
-  align-items: center;
-  gap: 8px;
+  justify-content: center;
   box-sizing: border-box;
   padding: 0 10px 8px;
   margin: 12px 2px 0;
-  color: var(--dsw-alias-label-secondary);
+  /* 与新会话按钮同一档字号、字重与墨色：读起来就是它上面的一行。 */
+  color: var(--dsw-alias-label-primary);
 }
 
 .nameplate[data-collapsed='true'] {
@@ -200,29 +173,14 @@
   display: none;
 }
 
-.nameplateAvatar {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  background: var(--dsw-alias-state-business-tertiary);
-  color: var(--dsw-alias-state-business-primary);
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1;
-  user-select: none;
-}
-
 .nameplateText {
   min-width: 0;
   overflow: hidden;
-  color: var(--dsw-alias-label-primary);
-  font-size: 13px;
+  /* 与新会话按钮同一档字号与字重，读起来是它的上一行。 */
+  font-size: 14px;
   font-weight: 500;
-  line-height: 20px;
+  line-height: 22px;
+  text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

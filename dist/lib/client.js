@@ -8,7 +8,7 @@ window.__ModuleLoader__.load({
 		let _deepseek_ai_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 		let react_jsx_runtime = require("react/jsx-runtime");
 		//#region \0assistant-css:E:\Plugin\发布版\dsh-assistant-profile\src\client\ProfilePage.module.css.mjs
-		const css = "._2lYP0a_page{box-sizing:border-box;background:var(--dsw-alias-bg-layer-1);min-height:100%;padding:28px 32px 48px;overflow-y:auto}._2lYP0a_section{max-width:720px;color:var(--dsw-alias-label-primary);flex-direction:column;gap:16px;margin:0 auto;display:flex}._2lYP0a_head{flex-direction:column;gap:4px;display:flex}._2lYP0a_title{margin:0;font-size:18px;font-weight:600;line-height:26px}._2lYP0a_intro{color:var(--dsw-alias-label-tertiary);margin:0;font-size:13px;line-height:20px}._2lYP0a_form{border:.5px solid var(--dsw-alias-settings-card-stroke);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-settings-card-fill);flex-direction:column;gap:18px;padding:20px;display:flex}._2lYP0a_row{grid-template-columns:minmax(0,1fr) minmax(0,240px);gap:16px;display:grid}@media (width<=640px){._2lYP0a_row{grid-template-columns:minmax(0,1fr)}}._2lYP0a_field{flex-direction:column;gap:6px;min-width:0;display:flex}._2lYP0a_label{font-size:13px;font-weight:500;line-height:18px}._2lYP0a_hint{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}._2lYP0a_hintWarn{color:var(--dsw-alias-state-warn-label)}._2lYP0a_control{width:100%}._2lYP0a_chips{gap:6px;display:flex}._2lYP0a_chip{border:.5px solid var(--dsw-alias-border-l3);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:999px;padding:2px 9px;font-size:12px;line-height:18px;transition:background .12s,border-color .12s,color .12s}._2lYP0a_chip:hover{background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_chipActive{border-color:var(--dsw-static-neutral-bluish-400);background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary)}._2lYP0a_textareaWrap{position:relative}._2lYP0a_textarea{box-sizing:border-box;border:.5px solid var(--dsw-alias-border-l4);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-layer-1);width:100%;min-height:168px;color:var(--dsw-alias-label-primary);resize:vertical;outline:none;padding:9px 12px 26px;font-family:inherit;font-size:13px;line-height:21px;display:block}._2lYP0a_textarea::placeholder{color:var(--dsw-alias-label-dimmed)}._2lYP0a_textarea:focus-visible{border-color:var(--dsw-alias-state-business-primary)}._2lYP0a_counter{color:var(--dsw-alias-label-tertiary);pointer-events:none;font-size:11px;line-height:14px;position:absolute;bottom:8px;right:10px}._2lYP0a_counter[data-long=true]{color:var(--dsw-alias-state-warn-label)}._2lYP0a_footer{align-items:center;gap:10px;padding-top:2px;display:flex}._2lYP0a_status{min-width:0;color:var(--dsw-alias-label-tertiary);text-overflow:ellipsis;white-space:nowrap;flex:1;font-size:12px;line-height:18px;overflow:hidden}._2lYP0a_statusError{color:var(--dsw-alias-state-error-primary)}._2lYP0a_nameplate{box-sizing:border-box;color:var(--dsw-alias-label-secondary);flex:none;align-items:center;gap:8px;margin:12px 2px 0;padding:0 10px 8px;display:flex}._2lYP0a_nameplate[data-collapsed=true],._2lYP0a_nameplate[hidden]{display:none}._2lYP0a_nameplateAvatar{background:var(--dsw-alias-state-business-tertiary);width:20px;height:20px;color:var(--dsw-alias-state-business-primary);user-select:none;border-radius:6px;flex:none;justify-content:center;align-items:center;font-size:11px;font-weight:600;line-height:1;display:inline-flex}._2lYP0a_nameplateText{min-width:0;color:var(--dsw-alias-label-primary);text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:500;line-height:20px;overflow:hidden}";
+		const css = "._2lYP0a_page{box-sizing:border-box;background:var(--dsw-alias-bg-layer-1);min-height:100%;padding:28px 32px 48px;overflow-y:auto}._2lYP0a_section{max-width:720px;color:var(--dsw-alias-label-primary);flex-direction:column;gap:16px;margin:0 auto;display:flex}._2lYP0a_head{flex-direction:column;gap:4px;display:flex}._2lYP0a_title{margin:0;font-size:18px;font-weight:600;line-height:26px}._2lYP0a_intro{color:var(--dsw-alias-label-tertiary);margin:0;font-size:13px;line-height:20px}._2lYP0a_form{border:.5px solid var(--dsw-alias-settings-card-stroke);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-settings-card-fill);flex-direction:column;gap:18px;padding:20px;display:flex}._2lYP0a_row{grid-template-columns:minmax(0,1fr) minmax(0,240px);gap:16px;display:grid}@media (width<=640px){._2lYP0a_row{grid-template-columns:minmax(0,1fr)}}._2lYP0a_field{flex-direction:column;gap:6px;min-width:0;display:flex}._2lYP0a_label{font-size:13px;font-weight:500;line-height:18px}._2lYP0a_hint{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}._2lYP0a_hintWarn{color:var(--dsw-alias-state-warn-label)}._2lYP0a_control{width:100%}._2lYP0a_textareaWrap{position:relative}._2lYP0a_textarea{box-sizing:border-box;border:.5px solid var(--dsw-alias-border-l4);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-layer-1);width:100%;min-height:168px;color:var(--dsw-alias-label-primary);resize:vertical;outline:none;padding:9px 12px 26px;font-family:inherit;font-size:13px;line-height:21px;display:block}._2lYP0a_textarea::placeholder{color:var(--dsw-alias-label-dimmed)}._2lYP0a_textarea:focus-visible{border-color:var(--dsw-alias-state-business-primary)}._2lYP0a_counter{color:var(--dsw-alias-label-tertiary);pointer-events:none;font-size:11px;line-height:14px;position:absolute;bottom:8px;right:10px}._2lYP0a_counter[data-long=true]{color:var(--dsw-alias-state-warn-label)}._2lYP0a_footer{align-items:center;gap:10px;padding-top:2px;display:flex}._2lYP0a_status{min-width:0;color:var(--dsw-alias-label-tertiary);text-overflow:ellipsis;white-space:nowrap;flex:1;font-size:12px;line-height:18px;overflow:hidden}._2lYP0a_statusError{color:var(--dsw-alias-state-error-primary)}._2lYP0a_nameplate{box-sizing:border-box;color:var(--dsw-alias-label-primary);flex:none;justify-content:center;margin:12px 2px 0;padding:0 10px 8px;display:flex}._2lYP0a_nameplate[data-collapsed=true],._2lYP0a_nameplate[hidden]{display:none}._2lYP0a_nameplateText{text-align:center;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-size:14px;font-weight:500;line-height:22px;overflow:hidden}";
 		const tagId = "@istarry/dsh-assistant-profile/ProfilePage.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -18,9 +18,6 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var ProfilePage_module_css_default = {
-			"chip": "_2lYP0a_chip",
-			"chipActive": "_2lYP0a_chipActive",
-			"chips": "_2lYP0a_chips",
 			"control": "_2lYP0a_control",
 			"counter": "_2lYP0a_counter",
 			"field": "_2lYP0a_field",
@@ -32,7 +29,6 @@ window.__ModuleLoader__.load({
 			"intro": "_2lYP0a_intro",
 			"label": "_2lYP0a_label",
 			"nameplate": "_2lYP0a_nameplate",
-			"nameplateAvatar": "_2lYP0a_nameplateAvatar",
 			"nameplateText": "_2lYP0a_nameplateText",
 			"page": "_2lYP0a_page",
 			"row": "_2lYP0a_row",
@@ -186,20 +182,8 @@ window.__ModuleLoader__.load({
 											}
 										}),
 										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-											className: ProfilePage_module_css_default.chips,
-											children: ["zh", "en"].map((id) => {
-												const text = id === "zh" ? t("language.quick.zh") : t("language.quick.en");
-												const active = values.language.trim() === text;
-												return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
-													type: "button",
-													className: active ? `${ProfilePage_module_css_default.chip} ${ProfilePage_module_css_default.chipActive}` : ProfilePage_module_css_default.chip,
-													"aria-pressed": active,
-													onClick: () => {
-														patch({ language: text });
-													},
-													children: text
-												}, id);
-											})
+											className: ProfilePage_module_css_default.hint,
+											children: t("language.hint")
 										})
 									]
 								})]
@@ -418,29 +402,19 @@ window.__ModuleLoader__.load({
 		/** 兜底巡检间隔：React 换掉整个侧栏时观察器会跟着失效。 */
 		const WATCHDOG_MS = 1e3;
 		/**
-		* 名字的首字，用作名plate的小方块。
-		* @param name - 助理名。
-		* @returns 首字（按码点取，中英文都对），空名返回空串。
-		*/
-		function initialOf(name) {
-			return Array.from(name)[0] ?? "";
-		}
-		/**
-		* 把助理名挂到侧栏上。
+		* 把助理名挂到侧栏上（一行居中文字，字号与「新会话」一致）。
 		* @param store - 档案 store（读名称）。
 		* @returns 卸载函数。
 		*/
 		function mountNameplate(store) {
 			let host;
 			let row;
-			let avatar;
 			let label;
 			let observer;
 			const sync = () => {
 				if (row === void 0) return;
 				const name = store.getSnapshot().values.name.trim();
 				row.hidden = name === "";
-				if (avatar !== void 0) avatar.textContent = initialOf(name);
 				if (label !== void 0) label.textContent = name;
 				row.dataset.collapsed = host?.className.includes(COLLAPSED) === true ? "true" : "false";
 			};
@@ -449,7 +423,6 @@ window.__ModuleLoader__.load({
 				observer = void 0;
 				row?.remove();
 				row = void 0;
-				avatar = void 0;
 				label = void 0;
 				host = void 0;
 			};
@@ -465,12 +438,9 @@ window.__ModuleLoader__.load({
 				host = parent;
 				row = document.createElement("div");
 				row.className = ProfilePage_module_css_default.nameplate;
-				avatar = document.createElement("span");
-				avatar.className = ProfilePage_module_css_default.nameplateAvatar;
-				avatar.setAttribute("aria-hidden", "true");
 				label = document.createElement("span");
 				label.className = ProfilePage_module_css_default.nameplateText;
-				row.append(avatar, label);
+				row.append(label);
 				parent.insertBefore(row, button);
 				observer = new MutationObserver(() => {
 					if (row === void 0 || host === void 0) return;
@@ -520,8 +490,6 @@ window.__ModuleLoader__.load({
 			"language.label": "语言",
 			"language.placeholder": "例如：简体中文",
 			"language.hint": "模型跟你说话用的语言。",
-			"language.quick.zh": "中文",
-			"language.quick.en": "English",
 			"persona.label": "人格提示词",
 			"persona.placeholder": "写下它是谁、怎么做事、在意什么。留空就用原生 DSH 的身份句。",
 			"persona.hint": "原样放在系统提示最前面，四个模式都从这段开始。",
@@ -550,8 +518,6 @@ window.__ModuleLoader__.load({
 			"language.label": "Language",
 			"language.placeholder": "e.g. Simplified Chinese",
 			"language.hint": "The language it replies in.",
-			"language.quick.zh": "中文",
-			"language.quick.en": "English",
 			"persona.label": "Persona prompt",
 			"persona.placeholder": "Who it is, how it works, what it cares about. Leave empty to keep the native DSH identity.",
 			"persona.hint": "Injected verbatim at the top of the system prompt, in every mode.",

@@ -22,23 +22,13 @@ const COLLAPSED = '_collapsed'
 const WATCHDOG_MS = 1000
 
 /**
- * 名字的首字，用作名plate的小方块。
- * @param name - 助理名。
- * @returns 首字（按码点取，中英文都对），空名返回空串。
- */
-function initialOf(name: string): string {
-  return Array.from(name)[0] ?? ''
-}
-
-/**
- * 把助理名挂到侧栏上。
+ * 把助理名挂到侧栏上（一行居中文字，字号与「新会话」一致）。
  * @param store - 档案 store（读名称）。
  * @returns 卸载函数。
  */
 export function mountNameplate(store: ProfileStore): () => void {
   let host: HTMLElement | undefined
   let row: HTMLDivElement | undefined
-  let avatar: HTMLSpanElement | undefined
   let label: HTMLSpanElement | undefined
   let observer: MutationObserver | undefined
 
@@ -46,7 +36,6 @@ export function mountNameplate(store: ProfileStore): () => void {
     if (row === undefined) return
     const name = store.getSnapshot().values.name.trim()
     row.hidden = name === ''
-    if (avatar !== undefined) avatar.textContent = initialOf(name)
     if (label !== undefined) label.textContent = name
     row.dataset.collapsed = host?.className.includes(COLLAPSED) === true ? 'true' : 'false'
   }
@@ -56,7 +45,6 @@ export function mountNameplate(store: ProfileStore): () => void {
     observer = undefined
     row?.remove()
     row = undefined
-    avatar = undefined
     label = undefined
     host = undefined
   }
@@ -73,12 +61,9 @@ export function mountNameplate(store: ProfileStore): () => void {
     host = parent
     row = document.createElement('div')
     row.className = css.nameplate
-    avatar = document.createElement('span')
-    avatar.className = css.nameplateAvatar
-    avatar.setAttribute('aria-hidden', 'true')
     label = document.createElement('span')
     label.className = css.nameplateText
-    row.append(avatar, label)
+    row.append(label)
     parent.insertBefore(row, button)
     observer = new MutationObserver(() => {
       if (row === undefined || host === undefined) return

@@ -10,7 +10,6 @@ import { Button, Input } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type { ProfileKey } from './locales.ts'
 import type { ProfileStore, ProfileValues } from './store.ts'
 import css from './ProfilePage.module.css'
 
@@ -116,23 +115,7 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
                 spellCheck={false}
                 onChange={(event) => { patch({ language: event.target.value }) }}
               />
-              <span className={css.chips}>
-                {(['zh', 'en'] as const).map((id) => {
-                  const text = id === 'zh' ? t('language.quick.zh') : t('language.quick.en')
-                  const active = values.language.trim() === text
-                  return (
-                    <button
-                      key={id}
-                      type="button"
-                      className={active ? `${css.chip} ${css.chipActive}` : css.chip}
-                      aria-pressed={active}
-                      onClick={() => { patch({ language: text }) }}
-                    >
-                      {text}
-                    </button>
-                  )
-                })}
-              </span>
+              <span className={css.hint}>{t('language.hint')}</span>
             </label>
           </div>
 
@@ -185,6 +168,3 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
     </div>
   )
 }
-
-/** 词典键在类型面被引用一次，保证两本词典不缺键。 */
-export type { ProfileKey }

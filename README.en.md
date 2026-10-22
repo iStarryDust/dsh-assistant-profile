@@ -68,7 +68,7 @@ It travels with the profile: another profile is another persona; backing up the 
 ```bash
 dsh plugin --profile <profile> add @istarry/dsh-assistant-profile
 # local tarball:
-dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.1.0.tgz
+dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.1.1.tgz
 ```
 
 Restart DSH. To remove:
