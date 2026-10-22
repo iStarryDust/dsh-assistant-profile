@@ -1,0 +1,59 @@
+{
+  "name": "@istarry/dsh-assistant-profile",
+  "description": "助理档案：给 DSH 一份全局人格（名称 / 风格 / 语言 / 人格提示词），每个新会话的系统提示最前面都带着它；侧栏「新会话」上方显示助理名",
+  "version": "0.1.0",
+  "icon": "./icon.svg",
+  "type": "module",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iStarryDust/dsh-assistant-profile.git"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "icon.svg",
+    "locale/*.json",
+    "lib/index.js",
+    "lib/client.js",
+    "lib/client.js.map",
+    "cordis.patch.yml",
+    "LICENSE",
+    "README*.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ],
+      "platform": "web"
+    }
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check",
+    "staging": "node build.mjs --staging",
+    "tooling": "cd tooling && pnpm install"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "devDependencies": {
+    "js-yaml": "4.2.0"
+  }
+}

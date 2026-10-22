@@ -1,0 +1,21 @@
+{
+  // 宿主半端的构建配置：build.mjs 用它做 tsc 预编译（降级标准装饰器与 using）。
+  // 只管宿主入口——浏览器半端由 rolldown 直接吃 TS，不经过 tsc。
+  "compilerOptions": {
+    "target": "ES2024",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "lib": ["ES2024"],
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    // 源码里写 `./types.ts`，emit 时自动改成 `./types.js`。
+    "rewriteRelativeImportExtensions": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true
+  },
+  "include": ["src/index.ts"]
+}

@@ -1,0 +1,22 @@
+{
+  // 编辑器/类型检查用的自足配置（不 extends 任何 harness 基础配置）。
+  // harness 那些 `@deepseek-ai/dsh-*` 的类型在这棵树里不存在，编辑器里会是红线，
+  // 不影响构建（构建走 tsc --noCheck 的纯代码降级 + rolldown 打包）。
+  "compilerOptions": {
+    "target": "ES2024",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "include": ["src", "build"]
+}

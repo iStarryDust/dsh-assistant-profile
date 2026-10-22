@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Assistant Profile",
+    "description": "One global persona for DSH: name, style, language, and persona prompt, opening every new session's system prompt; the assistant name sits above New Session in the sidebar"
+  }
+}

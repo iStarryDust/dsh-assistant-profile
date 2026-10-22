@@ -1,0 +1,14 @@
+{
+  "name": "@istarry/dsh-assistant-profile-tooling",
+  "private": true,
+  "description": "构建工具链（与插件产物分开安装，避免 workspace 协议污染发布清单）",
+  "devDependencies": {
+    "@types/node": "22.20.0",
+    "@types/react": "18.3.28",
+    "@types/react-dom": "18.3.7",
+    "js-yaml": "4.2.0",
+    "lightningcss": "1.32.0",
+    "tsdown": "0.22.2",
+    "typescript": "6.0.3"
+  }
+}
