@@ -42,7 +42,7 @@ DeepSeek 的上下文缓存是前缀缓存：系统提示在最前面，直接�
 
 - 侧栏「插件」下面多一行**助理档案**（行序 5，夹在插件与自动化任务之间）。
 - 点开是主区的一个页面：名称、语言、人格提示词，右下角实时字数（超过 2000 字转成提醒色）。
-- 「保存」行左侧是人格预设：**默认一 / 默认二 / 默认三**（点击整套应用并立即保存）加「另存」出来的自定义（名字取自「名称」，胶囊右侧带小删除钮）；装好默认用**默认三**，放不下横向滚动。
+- 「保存」行左侧是人格预设：**默认一 / 默认二 / 默认三**（点击只把三段文本填进表单，落盘仍按「保存」）加「另存」出来的自定义（名字取自「名称」，胶囊右侧带小删除钮）；装好默认用**默认三**，放不下横向滚动。
 - 「新会话」按钮上方一行小字 + 首字方块显示助理名；侧栏收成 56px 图标栏时自动隐藏；改完名称保存后立刻变。
 - 名称默认 `大肥鱼`、语言默认 `中文`。
 
@@ -66,7 +66,7 @@ DeepSeek 的上下文缓存是前缀缓存：系统提示在最前面，直接�
 ```bash
 dsh plugin --profile <profile> add @istarry/dsh-assistant-profile
 # 本地包：
-dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.2.0.tgz
+dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.2.1.tgz
 ```
 
 重启 DSH 后生效。卸载：

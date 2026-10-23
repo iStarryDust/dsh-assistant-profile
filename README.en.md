@@ -42,7 +42,7 @@ On a route without it (the default `deepseek-v4-pro` entry, for example) a mid-s
 
 - A new **Assistant Profile** row in the sidebar, right below Plugins (order 5).
 - It opens a main-area page: name, language, persona prompt, a live character counter (turns warning-coloured past 2000).
-- Left of Save sits the persona row: **Default 1 / 2 / 3** (click applies and saves in one step) plus "Save as" copies (named after the Name field, each with a small delete button); a fresh install starts on Default 3, and the row scrolls horizontally when it overflows.
+- Left of Save sits the persona row: **Default 1 / 2 / 3** (a click only fills the three fields; Save still decides what sticks) plus "Save as" copies (named after the Name field, each with a small delete button); a fresh install starts on Default 3, and the row scrolls horizontally when it overflows.
 - Above the New Session button: a quiet name row (first-character chip + name). It hides when the sidebar collapses to the 56px rail and updates as soon as a new name is saved.
 - Defaults: name `大肥鱼`, language `中文`.
 
@@ -66,7 +66,7 @@ It travels with the profile: another profile is another persona; backing up the 
 ```bash
 dsh plugin --profile <profile> add @istarry/dsh-assistant-profile
 # local tarball:
-dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.2.0.tgz
+dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.2.1.tgz
 ```
 
 Restart DSH. To remove:

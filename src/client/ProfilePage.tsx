@@ -4,9 +4,9 @@
  * 页面只编辑、不预览：真正的注入发生在宿主侧（每个新会话的系统提示首段），
  * 这里把「它会出现在哪里」写在每个字段的说明里，省掉一块会随时间漂移的假预览。
  *
- * 「保存」行左侧是人格预设：三个内置（默认一/二/三，点击即整套应用并保存）加
- * 「另存」出来的自定义（名字取自「名称」，胶囊右侧带一个小删除钮）。装好默认用
- * 默认三；预设多到一行放不下时横向滚动，不换行不挤压。
+ * 「保存」行左侧是人格预设：三个内置（默认一/二/三，点击只把整套文本填进三个字段，
+ * 落盘仍由「保存」决定）加「另存」出来的自定义（名字取自「名称」，胶囊右侧带一个
+ * 小删除钮）。装好默认用默认三；预设多到一行放不下时横向滚动，不换行不挤压。
  */
 
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react'
@@ -80,16 +80,11 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
     }
   }
 
-  /** 点一个预设 = 整套应用 + 立即保存：切换人格是一步，不该再多一次「记得保存」。 */
-  const applyPreset = async (preset: ProfileValues): Promise<void> => {
-    if (!writable || busy) return
+  /** 点一个预设 = 只把三段文本填进表单，是否落盘由用户自己按「保存」决定。 */
+  const applyPreset = (preset: ProfileValues): void => {
     setDraft(preset)
-    const result = await profile.save(preset)
-    if (result.ok) {
-      setDraft(undefined)
-      setSaved(true)
-      setNotice(undefined)
-    }
+    setSaved(false)
+    setNotice(undefined)
   }
 
   /** 「另存」：以「名称」为名，把当前三段存成一份自定义人格。 */
@@ -196,7 +191,7 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
                     className={active ? `${css.chip} ${css.chipActive}` : css.chip}
                     aria-pressed={active}
                     disabled={!writable || busy}
-                    onClick={() => { void applyPreset(candidate) }}
+                    onClick={() => { applyPreset(candidate) }}
                   >
                     {label}
                   </button>
@@ -212,7 +207,7 @@ export function ProfilePage({ profile, t }: ProfilePageProps): ReactNode {
                       className={active ? `${css.chip} ${css.chipActive}` : css.chip}
                       aria-pressed={active}
                       disabled={!writable || busy}
-                      onClick={() => { void applyPreset(candidate) }}
+                      onClick={() => { applyPreset(candidate) }}
                     >
                       {custom.name}
                     </button>
