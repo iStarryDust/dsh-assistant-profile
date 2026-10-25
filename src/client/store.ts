@@ -1,5 +1,5 @@
 /**
- * 助理档案的浏览器侧状态：官方设置通道（`configForms`）上的一层薄包装。
+ * Agent助理的浏览器侧状态：官方设置通道（`configForms`）上的一层薄包装。
  *
  * 档案存在 profile 的配置里，服务端一侧就是插件自己的 volatile 字段，所以这里既
  * 不写自定义 RPC，也不碰文件——`configForms.get(entryId)` 给出读快照、订阅与原子

@@ -1,5 +1,8 @@
 import z from "@deepseek-ai/schemastery";
 import { Service } from "@deepseek-ai/cordis";
+import { existsSync, readdirSync, rmSync, statSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
 //#region ../tooling/node_modules/.pnpm/js-yaml@4.2.0/node_modules/js-yaml/dist/js-yaml.mjs
 /*! js-yaml 4.2.0 https://github.com/nodeca/js-yaml @license MIT */
 var __create = Object.create;
@@ -2508,9 +2511,148 @@ function compose(headerLines, entryLines) {
 	return body.endsWith("\n") ? body : `${body}\n`;
 }
 //#endregion
+//#region ../.build/tsc/session-delete.js
+/**
+* 删除一个会话：磁盘日志、投影索引、工作区登记，最后通知前端把这一行拿掉。
+*
+* 这一版 harness 的会话存储（`sessionPersistence`）**没有** remove 方法，所以删除是
+* 自己做的：按磁盘布局（`<root>/<项目>/session-<id>/`）删掉会话目录，再尽力清理上层
+* 记账（索引行、工作区登记），最后发 `api-session/removed`——官方客户端的
+* session-controller 正是靠这个事件把行从侧栏移除（`remote.$on('api-session/removed')`）。
+*
+* 三条安全线：
+* 1. 正在跑的会话直接拒绝（`agent.status === 'running'`）；
+* 2. 空闲但仍挂在注册表里的，先 detach（与 edit-regen 的做法一致）；
+* 3. 只删“路径里带这个会话 id”的目录，拿不准就不删。
+*
+* @module @istarry/dsh-assistant-profile/session-delete
+*/
+/**
+* 存储根目录：优先问持久化服务要，退一步用 `$DSH_HOME/sessions`。
+* @param persistence - 持久化服务。
+* @returns 绝对路径，或 undefined（两处都拿不到时放弃删除）。
+*/
+function sessionsRootOf(persistence) {
+	const root = persistence?.root;
+	if (typeof root === "string" && root !== "" && existsSync(root)) return root;
+	const home = process.env["DSH_HOME"];
+	const fallback = home === void 0 || home === "" ? join(homedir(), ".dsh", "sessions") : join(home, "sessions");
+	return existsSync(fallback) ? fallback : void 0;
+}
+/**
+* 找出一个会话在磁盘上的所有目录（分代文件可能让一个会话占多个目录）。
+* @param root - 存储根目录。
+* @param sessionId - 会话 id。
+* @returns 命中的目录列表（通常只有一个）。
+*/
+function sessionDirsOf(root, sessionId) {
+	const found = [];
+	let projects = [];
+	try {
+		projects = readdirSync(root);
+	} catch {
+		return found;
+	}
+	const names = /* @__PURE__ */ new Set([sessionId, `session-${sessionId}`]);
+	if (sessionId.startsWith("session-")) names.add(sessionId.slice(8));
+	for (const project of projects) for (const name of names) {
+		const dir = join(root, project, name);
+		try {
+			if (statSync(dir).isDirectory()) found.push(dir);
+		} catch {}
+	}
+	return [...new Set(found)];
+}
+/**
+* 删除一个会话。
+* @param ctx - 宿主上下文。
+* @param sessionId - 要删的会话。
+* @returns 结果（失败时带原因码，由前端翻译）。
+*/
+function deleteSession(ctx, sessionId) {
+	const id = sessionId.trim();
+	if (id === "") return {
+		ok: false,
+		outcome: "no session"
+	};
+	const agents = ctx.get("agents");
+	const agent = agents?.get(id);
+	if (agent?.status === "running") return {
+		ok: false,
+		outcome: "running"
+	};
+	if (agent !== void 0) {
+		const entry = agents?.store?.get(id);
+		if (entry === void 0 || typeof agents?.detachEntered !== "function") return {
+			ok: false,
+			outcome: "open"
+		};
+		try {
+			agents.detachEntered(entry);
+		} catch {
+			return {
+				ok: false,
+				outcome: "open"
+			};
+		}
+	}
+	const root = sessionsRootOf(ctx.get("sessionPersistence"));
+	if (root === void 0) return {
+		ok: false,
+		outcome: "delete failed"
+	};
+	const dirs = sessionDirsOf(root, id);
+	if (dirs.length === 0) return {
+		ok: false,
+		outcome: "not found"
+	};
+	const removed = [];
+	for (const dir of dirs) try {
+		rmSync(dir, {
+			recursive: true,
+			force: true
+		});
+		removed.push(dir);
+	} catch {
+		return {
+			ok: false,
+			outcome: "delete failed"
+		};
+	}
+	if (removed.length === 0) return {
+		ok: false,
+		outcome: "delete failed"
+	};
+	try {
+		ctx.get("sessionQuery")?._deleteSession?.("persisted", id);
+	} catch {}
+	const registry = ctx.get("workspaceRegistry");
+	try {
+		registry?.forgetSession?.(id);
+	} catch {}
+	try {
+		registry?.deleteKnown?.(id);
+	} catch {}
+	try {
+		ctx.get("sessionProjectionCache")?.forget?.(id);
+	} catch {}
+	try {
+		ctx.emit("api-session/removed", id);
+	} catch {
+		return {
+			ok: true,
+			outcome: "deleted (silent)"
+		};
+	}
+	return {
+		ok: true,
+		outcome: "deleted"
+	};
+}
+//#endregion
 //#region ../.build/tsc/index.js
 /**
-* 助理档案 · 宿主半端。
+* Agent助理 · 宿主半端。
 *
 * 一个档案、一份人格、四个模式通用。人格的做法只有一件事：每个对话 agent 创建时，
 * 在这个 agent **自己的上下文**里注册一段 `deployment:persona-prefix`——作用域链上最近
@@ -2549,7 +2691,7 @@ const MEMORY_ORDER = 500;
 /** 人格插件的包名，兼容没有 `id` 的旧写法。 */
 const PERSONA_PLUGIN_NAME = "@deepseek-ai/dsh-persona";
 /**
-* 运行时 schema。字段都是 volatile：它们由「助理档案」页与「Agent记忆」设置页
+* 运行时 schema。字段都是 volatile：它们由「Agent助理」页与「Agent记忆」设置页
 * 而不是插件配置页编辑，改动经设置通道写回 profile 的 patch，重启后仍在。默认值取
 * 内置「默认三」，所以装好就是一条带人设的鱼；三栏全部清空再保存，则什么都不注入。
 */
@@ -2561,7 +2703,8 @@ const Config = z.object({
 	memoryEnabled: z.boolean().default(true).description("Inject the assistant memory into the system prompt").volatile(),
 	autoMemory: z.boolean().default(false).description("Let the model write memories on its own judgment (requires memoryEnabled)").volatile(),
 	memoryText: z.string().default("").description("The assistant memory document").volatile(),
-	rememberSignal: z.string().default("").description("Browser-to-host mailbox for the remember button").volatile()
+	rememberSignal: z.string().default("").description("Browser-to-host mailbox for the remember button").volatile(),
+	deleteSignal: z.string().default("").description("Browser-to-host mailbox for the session delete action").volatile()
 });
 /** 跨插件重载共享的当前配置引用：旧闭包也能读到新值。 */
 const LIVE = Symbol.for("dsh.assistant-profile.config");
@@ -2729,7 +2872,7 @@ function parseSignal(raw) {
 	}
 }
 /**
-* 助理档案服务：人格注入 + 单份长期记忆。
+* Agent助理服务：人格注入 + 单份长期记忆。
 *
 * 记忆的存储、注入、两个开关、`memory_add` 工具与按钮提炼都在这里；客户端只负责
 * 设置页、聊天里的「记住」按钮和选择弹窗。
@@ -2753,6 +2896,10 @@ var AssistantProfile = class extends Service {
 	remembering = false;
 	/** 上一次处理过的请求 id，防止同一请求被重复执行。 */
 	lastRequestId;
+	/** 删除信箱正在处理中。 */
+	deleting = false;
+	/** 上一次处理过的删除请求 id。 */
+	lastDeleteId;
 	constructor(ctx, config) {
 		super(ctx, "assistantProfile");
 		this.config = config;
@@ -2787,6 +2934,7 @@ var AssistantProfile = class extends Service {
 			const poller = setInterval(() => {
 				this.syncTool();
 				this.pumpRemember();
+				this.pumpDelete();
 			}, MAILBOX_POLL_MS);
 			return () => {
 				clearInterval(poller);
@@ -2939,6 +3087,34 @@ var AssistantProfile = class extends Service {
 	async publishSignal(signal) {
 		return await this.persist({ rememberSignal: JSON.stringify(signal) });
 	}
+	/** 检查删除信箱，有请求就删掉那个会话并把结果写回。 */
+	async pumpDelete() {
+		if (this.deleting) return;
+		const signal = parseSignal(this.config.deleteSignal.get());
+		if (signal?.phase !== "request" || signal.id === void 0) return;
+		if (signal.id === this.lastDeleteId) return;
+		this.deleting = true;
+		this.lastDeleteId = signal.id;
+		let outcome;
+		try {
+			outcome = deleteSession(this.ctx, signal.sessionId ?? "");
+		} catch (error) {
+			outcome = {
+				ok: false,
+				outcome: `failed: ${errorChain(error)}`
+			};
+		}
+		try {
+			if (!await this.persist({ deleteSignal: JSON.stringify({
+				id: signal.id,
+				phase: "done",
+				ok: outcome.ok,
+				outcome: outcome.outcome
+			}) })) this.lastDeleteId = void 0;
+		} finally {
+			this.deleting = false;
+		}
+	}
 	/**
 	* 用该会话自己的模型把选中的对话文本提炼成记忆条目并追加。
 	*
@@ -3037,4 +3213,4 @@ function isVacuousEntry(line) {
 	return normalized === "" || normalized === "空行" || normalized === "无" || normalized === "没有" || normalized === "无内容" || normalized === "无值得记住的内容" || normalized === "暂无" || normalized === "none" || normalized === "no" || normalized === "nothing" || normalized === "na" || normalized === "n/a";
 }
 //#endregion
-export { Config, MEMORY_SECTION, appendToText, dedupeKey, AssistantProfile as default, isVacuousEntry, name, parseEntries, renderPersona, stampNow, stripInvisible };
+export { Config, MEMORY_SECTION, appendToText, dedupeKey, AssistantProfile as default, deleteSession, isVacuousEntry, name, parseEntries, renderPersona, stampNow, stripInvisible };

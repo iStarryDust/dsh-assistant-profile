@@ -103,13 +103,13 @@ window.__ModuleLoader__.load({
 		];
 		//#endregion
 		//#region \0assistant-css:E:\Plugin\发布版\dsh-assistant-profile\src\client\ProfilePage.module.css.mjs
-		const css$2 = "._2lYP0a_page{box-sizing:border-box;background:var(--dsw-alias-bg-layer-1);min-height:100%;padding:28px 32px 48px;overflow-y:auto}._2lYP0a_section{max-width:720px;color:var(--dsw-alias-label-primary);flex-direction:column;gap:16px;margin:0 auto;display:flex}._2lYP0a_head{flex-direction:column;gap:4px;display:flex}._2lYP0a_title{margin:0;font-size:18px;font-weight:600;line-height:26px}._2lYP0a_intro{color:var(--dsw-alias-label-tertiary);margin:0;font-size:13px;line-height:20px}._2lYP0a_form{border:.5px solid var(--dsw-alias-settings-card-stroke);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-settings-card-fill);flex-direction:column;gap:18px;padding:20px;display:flex}._2lYP0a_row{grid-template-columns:minmax(0,1fr) minmax(0,240px);gap:16px;display:grid}@media (width<=640px){._2lYP0a_row{grid-template-columns:minmax(0,1fr)}}._2lYP0a_field{flex-direction:column;gap:6px;min-width:0;display:flex}._2lYP0a_label{font-size:13px;font-weight:500;line-height:18px}._2lYP0a_hint{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}._2lYP0a_hintWarn{color:var(--dsw-alias-state-warn-label)}._2lYP0a_control{width:100%}._2lYP0a_textareaWrap{position:relative}._2lYP0a_textarea{box-sizing:border-box;border:.5px solid var(--dsw-alias-border-l4);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-layer-1);width:100%;min-height:168px;color:var(--dsw-alias-label-primary);resize:vertical;outline:none;padding:9px 12px 26px;font-family:inherit;font-size:13px;line-height:21px;display:block}._2lYP0a_textarea::placeholder{color:var(--dsw-alias-label-dimmed)}._2lYP0a_textarea:focus-visible{border-color:var(--dsw-alias-state-business-primary)}._2lYP0a_counter{color:var(--dsw-alias-label-tertiary);pointer-events:none;font-size:11px;line-height:14px;position:absolute;bottom:8px;right:10px}._2lYP0a_counter[data-long=true]{color:var(--dsw-alias-state-warn-label)}._2lYP0a_status{color:var(--dsw-alias-label-tertiary);margin:0;font-size:12px;line-height:18px}._2lYP0a_statusError{color:var(--dsw-alias-state-error-primary)}._2lYP0a_footer{align-items:center;gap:10px;padding-top:2px;display:flex}._2lYP0a_presets{scrollbar-width:thin;flex:1;align-items:center;gap:6px;min-width:0;padding:2px 0;display:flex;overflow-x:auto}._2lYP0a_chip{border:.5px solid var(--dsw-alias-border-l3);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:999px;flex:none;padding:3px 10px;font-size:12px;line-height:18px;transition:background .12s,border-color .12s,color .12s}._2lYP0a_chip:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_chip:disabled{cursor:default;opacity:.55}._2lYP0a_chipActive{border-color:var(--dsw-static-neutral-bluish-400);background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary)}._2lYP0a_custom{border:.5px solid var(--dsw-alias-border-l3);background:0 0;border-radius:999px;flex:none;align-items:center;transition:background .12s,border-color .12s;display:inline-flex}._2lYP0a_custom:hover{background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_custom ._2lYP0a_chip{border:none;border-radius:999px 0 0 999px;padding-right:4px}._2lYP0a_customDelete{color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;border-radius:0 999px 999px 0;padding:3px 8px 3px 2px;font-size:13px;line-height:18px}._2lYP0a_customDelete:hover:not(:disabled){color:var(--dsw-alias-state-error-primary)}._2lYP0a_customDelete:disabled{cursor:default;opacity:.55}._2lYP0a_nameplate{box-sizing:border-box;color:var(--dsw-alias-label-primary);flex:none;justify-content:center;margin:12px 2px 0;padding:0 10px 8px;display:flex}._2lYP0a_nameplate[data-collapsed=true],._2lYP0a_nameplate[hidden]{display:none}._2lYP0a_nameplateText{text-align:center;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-size:14px;font-weight:500;line-height:22px;overflow:hidden}";
-		const tagId$2 = "@istarry/dsh-assistant-profile/ProfilePage.module.css";
-		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId$2) + "]") === null) {
+		const css$3 = "._2lYP0a_page{box-sizing:border-box;background:var(--dsw-alias-bg-layer-1);min-height:100%;padding:28px 32px 48px;overflow-y:auto}._2lYP0a_section{max-width:720px;color:var(--dsw-alias-label-primary);flex-direction:column;gap:16px;margin:0 auto;display:flex}._2lYP0a_head{flex-direction:column;gap:4px;display:flex}._2lYP0a_title{margin:0;font-size:18px;font-weight:600;line-height:26px}._2lYP0a_intro{color:var(--dsw-alias-label-tertiary);margin:0;font-size:13px;line-height:20px}._2lYP0a_form{border:.5px solid var(--dsw-alias-settings-card-stroke);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-settings-card-fill);flex-direction:column;gap:18px;padding:20px;display:flex}._2lYP0a_row{grid-template-columns:minmax(0,1fr) minmax(0,240px);gap:16px;display:grid}@media (width<=640px){._2lYP0a_row{grid-template-columns:minmax(0,1fr)}}._2lYP0a_field{flex-direction:column;gap:6px;min-width:0;display:flex}._2lYP0a_label{font-size:13px;font-weight:500;line-height:18px}._2lYP0a_hint{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}._2lYP0a_hintWarn{color:var(--dsw-alias-state-warn-label)}._2lYP0a_control{width:100%}._2lYP0a_textareaWrap{position:relative}._2lYP0a_textarea{box-sizing:border-box;border:.5px solid var(--dsw-alias-border-l4);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-layer-1);width:100%;min-height:168px;color:var(--dsw-alias-label-primary);resize:vertical;outline:none;padding:9px 12px 26px;font-family:inherit;font-size:13px;line-height:21px;display:block}._2lYP0a_textarea::placeholder{color:var(--dsw-alias-label-dimmed)}._2lYP0a_textarea:focus-visible{border-color:var(--dsw-alias-state-business-primary)}._2lYP0a_counter{color:var(--dsw-alias-label-tertiary);pointer-events:none;font-size:11px;line-height:14px;position:absolute;bottom:8px;right:10px}._2lYP0a_counter[data-long=true]{color:var(--dsw-alias-state-warn-label)}._2lYP0a_status{color:var(--dsw-alias-label-tertiary);margin:0;font-size:12px;line-height:18px}._2lYP0a_statusError{color:var(--dsw-alias-state-error-primary)}._2lYP0a_footer{align-items:center;gap:10px;padding-top:2px;display:flex}._2lYP0a_presets{scrollbar-width:thin;flex:1;align-items:center;gap:6px;min-width:0;padding:2px 0;display:flex;overflow-x:auto}._2lYP0a_chip{border:.5px solid var(--dsw-alias-border-l3);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:999px;flex:none;padding:3px 10px;font-size:12px;line-height:18px;transition:background .12s,border-color .12s,color .12s}._2lYP0a_chip:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_chip:disabled{cursor:default;opacity:.55}._2lYP0a_chipActive{border-color:var(--dsw-static-neutral-bluish-400);background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary)}._2lYP0a_custom{border:.5px solid var(--dsw-alias-border-l3);background:0 0;border-radius:999px;flex:none;align-items:center;transition:background .12s,border-color .12s;display:inline-flex}._2lYP0a_custom:hover{background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_custom ._2lYP0a_chip{border:none;border-radius:999px 0 0 999px;padding-right:4px}._2lYP0a_customDelete{color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;border-radius:0 999px 999px 0;padding:3px 8px 3px 2px;font-size:13px;line-height:18px}._2lYP0a_customDelete:hover:not(:disabled){color:var(--dsw-alias-state-error-primary)}._2lYP0a_customDelete:disabled{cursor:default;opacity:.55}._2lYP0a_nameplate{box-sizing:border-box;color:var(--dsw-alias-label-primary);flex:none;justify-content:center;margin:12px 2px 0;padding:0 10px 8px;display:flex}._2lYP0a_nameplate[data-collapsed=true],._2lYP0a_nameplate[hidden]{display:none}._2lYP0a_nameplateText{text-align:center;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-size:14px;font-weight:500;line-height:22px;overflow:hidden}";
+		const tagId$3 = "@istarry/dsh-assistant-profile/ProfilePage.module.css";
+		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId$3) + "]") === null) {
 			const tag = document.createElement("style");
 			tag.dataset.plugin = "@istarry/dsh-assistant-profile";
-			tag.dataset.pluginCss = tagId$2;
-			tag.textContent = css$2;
+			tag.dataset.pluginCss = tagId$3;
+			tag.textContent = css$3;
 			document.head.appendChild(tag);
 		}
 		var ProfilePage_module_css_default = {
@@ -142,7 +142,7 @@ window.__ModuleLoader__.load({
 		//#endregion
 		//#region ../src/client/ProfilePage.tsx
 		/**
-		* 助理档案页：名称、语言、人格提示词三段，一次保存原子落盘。
+		* Agent助理页：名称、语言、人格提示词三段，一次保存原子落盘。
 		*
 		* 页面只编辑、不预览：真正的注入发生在宿主侧（每个新会话的系统提示首段），
 		* 这里把「它会出现在哪里」写在每个字段的说明里，省掉一块会随时间漂移的假预览。
@@ -162,7 +162,7 @@ window.__ModuleLoader__.load({
 			"persona"
 		];
 		/**
-		* 渲染助理档案页。
+		* 渲染Agent助理页。
 		* @param props - 档案 store 与本地化文案。
 		* @returns 页面元素。
 		*/
@@ -680,13 +680,13 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region \0assistant-css:E:\Plugin\发布版\dsh-assistant-profile\src\client\MemorySection.module.css.mjs
-		const css$1 = "._26v_lW_page{flex-direction:column;gap:18px;padding:4px 0 24px;display:flex}._26v_lW_title{margin:0;font-size:16px;font-weight:600}._26v_lW_intro{opacity:.72;margin:0;font-size:13px;line-height:1.6}._26v_lW_group{border:1px solid var(--dsw-alias-border-l1);border-radius:10px;flex-direction:column;gap:10px;padding:14px;display:flex}._26v_lW_groupHead{margin:0;font-size:13px;font-weight:600}._26v_lW_row{justify-content:space-between;align-items:center;gap:16px;padding:6px 0;display:flex}._26v_lW_rowText{flex-direction:column;gap:3px;display:flex}._26v_lW_rowTitle{font-size:13px}._26v_lW_rowDesc{opacity:.62;margin:0;font-size:12px;line-height:1.5}._26v_lW_switch{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-interactive-bg-default);cursor:pointer;border-radius:11px;flex:none;width:38px;height:22px;padding:0;transition:background .15s;position:relative}._26v_lW_switch:disabled{opacity:.45;cursor:not-allowed}._26v_lW_on{background:var(--dsw-static-deepseek-500,#4d6bfe);border-color:#0000}._26v_lW_knob{background:#fff;border-radius:50%;width:16px;height:16px;transition:transform .15s;position:absolute;top:2px;left:2px}._26v_lW_on ._26v_lW_knob{transform:translate(16px)}._26v_lW_editorHead{justify-content:space-between;align-items:baseline;display:flex}._26v_lW_textarea{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-base);width:100%;color:inherit;resize:vertical;border-radius:8px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.6}._26v_lW_actions{flex-wrap:wrap;align-items:center;gap:10px;display:flex}._26v_lW_primary,._26v_lW_secondary{cursor:pointer;border-radius:7px;padding:5px 14px;font-size:12px}._26v_lW_primary{background:var(--dsw-static-deepseek-500,#4d6bfe);color:#fff;border:1px solid #0000}._26v_lW_secondary{border:1px solid var(--dsw-alias-border-l1);color:inherit;background:0 0}._26v_lW_primary:disabled,._26v_lW_secondary:disabled{opacity:.45;cursor:not-allowed}._26v_lW_link{color:var(--dsw-static-deepseek-500,#4d6bfe);cursor:pointer;background:0 0;border:none;padding:0;font-size:12px}._26v_lW_ok{color:var(--dsw-static-deepseek-500,#4d6bfe);font-size:12px}._26v_lW_error{color:#d33;margin:0;font-size:12px}._26v_lW_overlay{z-index:60;background:#00000059;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._26v_lW_dialog{background:var(--dsw-alias-bg-overlay,#fff);border-radius:12px;flex-direction:column;gap:12px;width:min(560px,92vw);max-height:84vh;padding:18px;display:flex;overflow:auto;box-shadow:0 12px 40px #00000038}._26v_lW_dialogTitle{margin:0;font-size:14px;font-weight:600}";
-		const tagId$1 = "@istarry/dsh-assistant-profile/MemorySection.module.css";
-		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId$1) + "]") === null) {
+		const css$2 = "._26v_lW_page{flex-direction:column;gap:18px;padding:4px 0 24px;display:flex}._26v_lW_title{margin:0;font-size:16px;font-weight:600}._26v_lW_intro{opacity:.72;margin:0;font-size:13px;line-height:1.6}._26v_lW_group{border:1px solid var(--dsw-alias-border-l1);border-radius:10px;flex-direction:column;gap:10px;padding:14px;display:flex}._26v_lW_groupHead{margin:0;font-size:13px;font-weight:600}._26v_lW_row{justify-content:space-between;align-items:center;gap:16px;padding:6px 0;display:flex}._26v_lW_rowText{flex-direction:column;gap:3px;display:flex}._26v_lW_rowTitle{font-size:13px}._26v_lW_rowDesc{opacity:.62;margin:0;font-size:12px;line-height:1.5}._26v_lW_switch{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-interactive-bg-default);cursor:pointer;border-radius:11px;flex:none;width:38px;height:22px;padding:0;transition:background .15s;position:relative}._26v_lW_switch:disabled{opacity:.45;cursor:not-allowed}._26v_lW_on{background:var(--dsw-static-deepseek-500,#4d6bfe);border-color:#0000}._26v_lW_knob{background:#fff;border-radius:50%;width:16px;height:16px;transition:transform .15s;position:absolute;top:2px;left:2px}._26v_lW_on ._26v_lW_knob{transform:translate(16px)}._26v_lW_editorHead{justify-content:space-between;align-items:baseline;display:flex}._26v_lW_textarea{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-base);width:100%;color:inherit;resize:vertical;border-radius:8px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.6}._26v_lW_actions{flex-wrap:wrap;align-items:center;gap:10px;display:flex}._26v_lW_primary,._26v_lW_secondary{cursor:pointer;border-radius:7px;padding:5px 14px;font-size:12px}._26v_lW_primary{background:var(--dsw-static-deepseek-500,#4d6bfe);color:#fff;border:1px solid #0000}._26v_lW_secondary{border:1px solid var(--dsw-alias-border-l1);color:inherit;background:0 0}._26v_lW_primary:disabled,._26v_lW_secondary:disabled{opacity:.45;cursor:not-allowed}._26v_lW_link{color:var(--dsw-static-deepseek-500,#4d6bfe);cursor:pointer;background:0 0;border:none;padding:0;font-size:12px}._26v_lW_ok{color:var(--dsw-static-deepseek-500,#4d6bfe);font-size:12px}._26v_lW_error{color:#d33;margin:0;font-size:12px}._26v_lW_overlay{z-index:60;background:#00000059;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._26v_lW_dialog{background:var(--dsw-alias-bg-overlay,#fff);border-radius:12px;flex-direction:column;gap:12px;width:min(560px,92vw);max-height:84vh;padding:18px;display:flex;overflow:auto;box-shadow:0 12px 40px #00000038}._26v_lW_dialogTitle{margin:0;font-size:14px;font-weight:600}";
+		const tagId$2 = "@istarry/dsh-assistant-profile/MemorySection.module.css";
+		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId$2) + "]") === null) {
 			const tag = document.createElement("style");
 			tag.dataset.plugin = "@istarry/dsh-assistant-profile";
-			tag.dataset.pluginCss = tagId$1;
-			tag.textContent = css$1;
+			tag.dataset.pluginCss = tagId$2;
+			tag.textContent = css$2;
 			document.head.appendChild(tag);
 		}
 		var MemorySection_module_css_default = {
@@ -862,13 +862,13 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region \0assistant-css:E:\Plugin\发布版\dsh-assistant-profile\src\client\MemoryActions.module.css.mjs
-		const css = ".BvVp9q_action{width:calc(28px + var(--dsh-content-font-delta,0px));height:calc(28px + var(--dsh-content-font-delta,0px));border-radius:var(--dsw-radius-sm);color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;justify-content:center;align-items:center;padding:6px;display:inline-flex}.BvVp9q_action svg{width:calc(15px + var(--dsh-content-font-delta,0px));height:calc(15px + var(--dsh-content-font-delta,0px))}.BvVp9q_action:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-secondary)}.BvVp9q_note{color:var(--dsw-alias-label-tertiary);padding-left:4px;font-size:12px;line-height:20px}.BvVp9q_list{flex-direction:column;gap:2px;max-height:min(52vh,460px);margin:-4px -4px 0;padding:4px;display:flex;overflow-y:auto}.BvVp9q_row{border-radius:var(--dsw-radius-sm);cursor:pointer;align-items:flex-start;gap:8px;padding:7px 8px;display:flex}.BvVp9q_row:hover{background:var(--dsw-alias-interactive-bg-hover)}.BvVp9q_rowChecked{background:var(--dsw-alias-bg-module-platform)}.BvVp9q_check{accent-color:var(--dsw-alias-state-business-primary);flex:none;margin:3px 0 0}.BvVp9q_side{background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-tertiary);white-space:nowrap;border-radius:999px;flex:none;padding:1px 6px;font-size:11px;line-height:17px}.BvVp9q_preview{min-width:0;color:var(--dsw-alias-label-primary);overflow-wrap:anywhere;font-size:13px;line-height:20px}.BvVp9q_empty{color:var(--dsw-alias-label-tertiary);text-align:center;padding:18px 8px;font-size:13px;line-height:20px}.BvVp9q_error{color:var(--dsw-alias-state-error-primary);margin-right:auto;font-size:12px;line-height:18px}";
-		const tagId = "@istarry/dsh-assistant-profile/MemoryActions.module.css";
-		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
+		const css$1 = ".BvVp9q_action{width:calc(28px + var(--dsh-content-font-delta,0px));height:calc(28px + var(--dsh-content-font-delta,0px));border-radius:var(--dsw-radius-sm);color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;justify-content:center;align-items:center;padding:6px;display:inline-flex}.BvVp9q_action svg{width:calc(15px + var(--dsh-content-font-delta,0px));height:calc(15px + var(--dsh-content-font-delta,0px))}.BvVp9q_action:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-secondary)}.BvVp9q_note{color:var(--dsw-alias-label-tertiary);padding-left:4px;font-size:12px;line-height:20px}.BvVp9q_list{flex-direction:column;gap:2px;max-height:min(52vh,460px);margin:-4px -4px 0;padding:4px;display:flex;overflow-y:auto}.BvVp9q_row{border-radius:var(--dsw-radius-sm);cursor:pointer;align-items:flex-start;gap:8px;padding:7px 8px;display:flex}.BvVp9q_row:hover{background:var(--dsw-alias-interactive-bg-hover)}.BvVp9q_rowChecked{background:var(--dsw-alias-bg-module-platform)}.BvVp9q_check{accent-color:var(--dsw-alias-state-business-primary);flex:none;margin:3px 0 0}.BvVp9q_side{background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-tertiary);white-space:nowrap;border-radius:999px;flex:none;padding:1px 6px;font-size:11px;line-height:17px}.BvVp9q_preview{min-width:0;color:var(--dsw-alias-label-primary);overflow-wrap:anywhere;font-size:13px;line-height:20px}.BvVp9q_empty{color:var(--dsw-alias-label-tertiary);text-align:center;padding:18px 8px;font-size:13px;line-height:20px}.BvVp9q_error{color:var(--dsw-alias-state-error-primary);margin-right:auto;font-size:12px;line-height:18px}";
+		const tagId$1 = "@istarry/dsh-assistant-profile/MemoryActions.module.css";
+		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId$1) + "]") === null) {
 			const tag = document.createElement("style");
 			tag.dataset.plugin = "@istarry/dsh-assistant-profile";
-			tag.dataset.pluginCss = tagId;
-			tag.textContent = css;
+			tag.dataset.pluginCss = tagId$1;
+			tag.textContent = css$1;
 			document.head.appendChild(tag);
 		}
 		var MemoryActions_module_css_default = {
@@ -1113,6 +1113,232 @@ window.__ModuleLoader__.load({
 			});
 		}
 		//#endregion
+		//#region \0assistant-css:E:\Plugin\发布版\dsh-assistant-profile\src\client\DeleteSession.module.css.mjs
+		const css = "._2WqL1q_body{color:var(--dsw-alias-label-primary);overflow-wrap:anywhere;margin:0;font-size:14px;line-height:22px}._2WqL1q_hint{color:var(--dsw-alias-label-tertiary);margin:8px 0 0;font-size:12px;line-height:18px}._2WqL1q_error{color:var(--dsw-alias-state-error-primary);margin-right:auto;font-size:12px;line-height:18px}";
+		const tagId = "@istarry/dsh-assistant-profile/DeleteSession.module.css";
+		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
+			const tag = document.createElement("style");
+			tag.dataset.plugin = "@istarry/dsh-assistant-profile";
+			tag.dataset.pluginCss = tagId;
+			tag.textContent = css;
+			document.head.appendChild(tag);
+		}
+		var DeleteSession_module_css_default = {
+			"body": "_2WqL1q_body",
+			"error": "_2WqL1q_error",
+			"hint": "_2WqL1q_hint"
+		};
+		//#endregion
+		//#region ../src/client/DeleteSession.tsx
+		/**
+		* 侧栏会话行菜单里的「删除」：删的是这个会话本身——磁盘日志、索引、工作区登记，
+		* 以及前端的那一行。
+		*
+		* 菜单项和确认框必须分开：菜单一关，菜单里的组件就整棵卸载了，弹窗会跟着消失。
+		* 所以菜单项只把「想删谁」写进模块级的 pending，确认框挂在 `shell.overlay` 上读它——
+		* 官方「停止并归档」也是这个结构。
+		*
+		* @module @istarry/dsh-assistant-profile/client/DeleteSession
+		*/
+		/** 模块级待办：菜单项写，确认框读（两个插槽不共享 React 树）。 */
+		let pending;
+		const listeners = /* @__PURE__ */ new Set();
+		/** 通知订阅者。 */
+		function publish() {
+			for (const listener of [...listeners]) listener();
+		}
+		/**
+		* 记下要删的会话并唤起确认框。
+		* @param sessionId - 目标会话。
+		* @param title - 行标题。
+		*/
+		function askDelete(sessionId, title) {
+			pending = {
+				sessionId,
+				title
+			};
+			publish();
+		}
+		/** 关掉确认框。 */
+		function dismiss() {
+			pending = void 0;
+			publish();
+		}
+		/**
+		* 订阅待办。
+		* @param listener - 变更回调。
+		* @returns 取消订阅。
+		*/
+		function subscribe(listener) {
+			listeners.add(listener);
+			return () => {
+				listeners.delete(listener);
+			};
+		}
+		/** @returns 当前待办（引用稳定，只有开关时变）。 */
+		const snapshot = () => pending;
+		/**
+		* 菜单行（order 600，带分隔线）。只负责关菜单并把目标交给确认框。
+		* @param props - 会话 id、标题、菜单开合与文案。
+		* @returns 一行「删除」。
+		*/
+		function DeleteSessionMenuItem({ sessionId, displayTitle, useMenuOpenState, t }) {
+			const [, setMenuOpen] = useMenuOpenState();
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.MenuItemButton, {
+				danger: true,
+				separatorBefore: true,
+				icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconTrashOutlineRegular, { size: 14 }),
+				onSelect: () => {
+					setMenuOpen(false);
+					askDelete(sessionId, displayTitle);
+				},
+				children: t("delete.menu")
+			});
+		}
+		/**
+		* `shell.overlay` 上的确认框。
+		* @param props - 删除动作与文案。
+		* @returns 弹窗；没有待办时什么都不渲染。
+		*/
+		function DeleteSessionDialog({ deleteSession, t }) {
+			const target = (0, react.useSyncExternalStore)(subscribe, snapshot);
+			const [busy, setBusy] = (0, react.useState)(false);
+			const [error, setError] = (0, react.useState)(null);
+			if (target === void 0) return null;
+			/** 把宿主的原因码翻成界面文案。 */
+			const reasonOf = (outcome) => {
+				if (outcome === "running") return t("delete.running");
+				if (outcome === "open") return t("delete.open");
+				if (outcome === "not found") return t("delete.notFound");
+				if (outcome === "delete failed") return t("delete.ioError");
+				if (outcome === "timed out") return t("delete.timeout");
+				if (outcome === "settings write refused") return t("delete.refused");
+				return outcome === "" ? t("delete.failed") : outcome;
+			};
+			const close = () => {
+				if (busy) return;
+				setError(null);
+				dismiss();
+			};
+			const submit = async () => {
+				if (busy) return;
+				setBusy(true);
+				setError(null);
+				try {
+					const result = await deleteSession(target.sessionId);
+					if (result.ok) {
+						dismiss();
+						return;
+					}
+					setError(reasonOf(result.outcome));
+				} catch (caught) {
+					setError(caught instanceof Error ? caught.message : t("delete.failed"));
+				} finally {
+					setBusy(false);
+				}
+			};
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
+				open: true,
+				title: t("delete.title"),
+				closeLabel: t("delete.cancel"),
+				onClose: close,
+				footer: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [
+					error !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+						className: DeleteSession_module_css_default.error,
+						role: "alert",
+						children: error
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+						variant: "outline",
+						disabled: busy,
+						onClick: close,
+						children: t("delete.cancel")
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+						variant: "primary",
+						disabled: busy,
+						onClick: () => {
+							submit();
+						},
+						children: busy ? t("delete.busy") : t("delete.confirm")
+					})
+				] }),
+				children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("p", {
+					className: DeleteSession_module_css_default.body,
+					children: t("delete.body", { title: target.title })
+				}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("p", {
+					className: DeleteSession_module_css_default.hint,
+					children: t("delete.hint")
+				})]
+			});
+		}
+		//#endregion
+		//#region ../src/client/delete.ts
+		/** 信箱字段名。 */
+		const SIGNAL_FIELD$1 = "deleteSignal";
+		/** 等结果的上限：删文件是毫秒级的，给足余量但不至于让人干等。 */
+		const TIMEOUT_MS$1 = 2e4;
+		/**
+		* 解析信箱字段。
+		* @param value - 字段原文。
+		* @returns 解析结果；坏数据当空。
+		*/
+		function parseSignal$1(value) {
+			if (typeof value !== "string" || value.trim() === "") return void 0;
+			try {
+				const parsed = JSON.parse(value);
+				if (typeof parsed !== "object" || parsed === null) return void 0;
+				return parsed;
+			} catch {
+				return;
+			}
+		}
+		/**
+		* 请求删除一个会话并等待宿主回话。
+		* @param form - 本插件的设置表（`deleteSignal` 所在命名空间）。
+		* @param sessionId - 要删除的会话。
+		* @returns 删除结果。
+		*/
+		async function requestDelete(form, sessionId) {
+			const id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+			if (!await form.set(SIGNAL_FIELD$1, JSON.stringify({
+				id,
+				phase: "request",
+				sessionId
+			}))) return {
+				ok: false,
+				outcome: "settings write refused"
+			};
+			return await new Promise((resolve) => {
+				let settled = false;
+				let timer;
+				let unsubscribe = () => {};
+				const finish = (value) => {
+					if (settled) return;
+					settled = true;
+					if (timer !== void 0) clearTimeout(timer);
+					unsubscribe();
+					resolve(value);
+				};
+				const check = () => {
+					const signal = parseSignal$1(form.getSnapshot().value?.[SIGNAL_FIELD$1]);
+					if (signal?.phase !== "done" || signal.id !== id) return;
+					finish({
+						ok: signal.ok === true,
+						outcome: signal.outcome ?? ""
+					});
+				};
+				unsubscribe = form.subscribe(check);
+				timer = setTimeout(() => {
+					finish({
+						ok: false,
+						outcome: "timed out"
+					});
+				}, TIMEOUT_MS$1);
+				check();
+			});
+		}
+		//#endregion
 		//#region ../src/client/remember.ts
 		/** 信箱字段名。 */
 		const SIGNAL_FIELD = "rememberSignal";
@@ -1274,15 +1500,15 @@ window.__ModuleLoader__.load({
 		//#endregion
 		//#region ../src/client/locales.ts
 		/**
-		* 词典：助理档案页与侧栏入口的文案。
+		* 词典：Agent助理页与侧栏入口的文案。
 		*
 		* 只放界面文案——名称、语言、人格是用户自己的内容，不进词典；
 		* 三个内置人格的标签是产品名，也在这里。
 		*/
 		/** 中文词典（键的来源）。 */
 		const zh = {
-			"panel": "助理档案",
-			"title": "助理档案",
+			"panel": "Agent助理",
+			"title": "Agent助理",
 			"intro": "这份人格会出现在每个新会话的系统提示最前面，标准 / PTC / 极简 / 创造四个模式通用。",
 			"name.label": "名称",
 			"name.placeholder": "例如：大肥鱼",
@@ -1324,6 +1550,20 @@ window.__ModuleLoader__.load({
 			"memory.saving": "保存中…",
 			"memory.saved": "已保存",
 			"memory.saveFailed": "保存失败",
+			"delete.menu": "删除",
+			"delete.title": "删除这个会话？",
+			"delete.body": "“{title}”的聊天记录会从本地磁盘删除，和它一起消失的还有索引与工作区登记。",
+			"delete.hint": "这一步不能撤销；只想让它从侧栏消失的话，用「归档会话」。",
+			"delete.confirm": "删除",
+			"delete.cancel": "取消",
+			"delete.busy": "正在删除…",
+			"delete.failed": "删除失败",
+			"delete.running": "会话还在运行，先停止再删。",
+			"delete.open": "这个会话还开着，先关掉它再删。",
+			"delete.notFound": "找不到这个会话的记录，可能已经被删掉了。",
+			"delete.ioError": "文件删除失败，可能被其他程序占用。",
+			"delete.timeout": "等太久了，没收到结果。",
+			"delete.refused": "设置通道拒绝了这次请求。",
 			"remember.action": "记住",
 			"remember.title": "记进长期记忆",
 			"remember.subtitle": "勾选要提炼的消息，模型会把它们压成几条稳定的事实，追加到助理记忆里。",
@@ -1343,8 +1583,8 @@ window.__ModuleLoader__.load({
 		};
 		/** 英文词典：与中文键一一对应。 */
 		const en = {
-			"panel": "Assistant Profile",
-			"title": "Assistant Profile",
+			"panel": "Agent Assistant",
+			"title": "Agent Assistant",
 			"intro": "This persona opens every new session: it rides the very top of the system prompt and applies to all four modes.",
 			"name.label": "Name",
 			"name.placeholder": "e.g. Big Fat Fish",
@@ -1386,6 +1626,20 @@ window.__ModuleLoader__.load({
 			"memory.saving": "Saving…",
 			"memory.saved": "Saved",
 			"memory.saveFailed": "Save failed",
+			"delete.menu": "Delete",
+			"delete.title": "Delete this session?",
+			"delete.body": "The chat log of “{title}” will be deleted from local storage, along with its index rows and workspace registration.",
+			"delete.hint": "This cannot be undone. To merely hide it from the sidebar, use Archive instead.",
+			"delete.confirm": "Delete",
+			"delete.cancel": "Cancel",
+			"delete.busy": "Deleting…",
+			"delete.failed": "Delete failed",
+			"delete.running": "This session is still running. Stop it first.",
+			"delete.open": "This session is still open. Close it first.",
+			"delete.notFound": "No log found for this session; it may already be gone.",
+			"delete.ioError": "Could not remove the files; another program may hold them.",
+			"delete.timeout": "Timed out waiting for the result.",
+			"delete.refused": "The settings channel refused the request.",
 			"remember.action": "Remember",
 			"remember.title": "Remember into long-term memory",
 			"remember.subtitle": "Tick the messages to distil; the model condenses them into a few stable facts and appends them to the assistant memory.",
@@ -1418,7 +1672,7 @@ window.__ModuleLoader__.load({
 			"configForms"
 		];
 		/**
-		* 挂载助理档案的界面。
+		* 挂载Agent助理的界面。
 		* @param ctx - 浏览器根上下文。
 		*/
 		function apply(ctx) {
@@ -1448,6 +1702,20 @@ window.__ModuleLoader__.load({
 			ctx.effect(() => () => {
 				controller.dispose();
 			}, "assistant-profile: memory form");
+			const deleteAction = { deleteSession: (sessionId) => requestDelete(signalForm, sessionId) };
+			ctx.slots.inject("sidebar.workspaces.session.menu.item", () => ctx.slots.register({
+				name: "sidebar.workspaces.session.menu.item",
+				id: "assistant-profile-delete",
+				order: 600,
+				locale: NS
+			}, DeleteSessionMenuItem));
+			ctx.slots.inject("shell.overlay", () => ctx.slots.register({
+				name: "shell.overlay",
+				id: "assistant-profile-delete-dialog",
+				order: 50,
+				locale: NS,
+				inject: () => deleteAction
+			}, DeleteSessionDialog));
 			ctx.slots.inject("conversation.chat.assistant-actions", () => ctx.slots.register({
 				name: "conversation.chat.assistant-actions",
 				id: "assistant-profile-remember",

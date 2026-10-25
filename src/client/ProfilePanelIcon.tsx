@@ -1,4 +1,4 @@
-/** 侧栏「助理档案」行的字形：官方个人化图标，由侧栏负责按钮、标签与选中态。 */
+/** 侧栏「Agent助理」行的字形：官方个人化图标，由侧栏负责按钮、标签与选中态。 */
 
 import type { ReactNode } from 'react'
 import { IconPersonalizationOutlineRegular } from '@deepseek-ai/dsh-client-ui-primitives'

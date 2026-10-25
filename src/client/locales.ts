@@ -1,5 +1,5 @@
 /**
- * 词典：助理档案页与侧栏入口的文案。
+ * 词典：Agent助理页与侧栏入口的文案。
  *
  * 只放界面文案——名称、语言、人格是用户自己的内容，不进词典；
  * 三个内置人格的标签是产品名，也在这里。
@@ -7,8 +7,8 @@
 
 /** 中文词典（键的来源）。 */
 export const zh = {
-  'panel': '助理档案',
-  'title': '助理档案',
+  'panel': 'Agent助理',
+  'title': 'Agent助理',
   'intro': '这份人格会出现在每个新会话的系统提示最前面，标准 / PTC / 极简 / 创造四个模式通用。',
   'name.label': '名称',
   'name.placeholder': '例如：大肥鱼',
@@ -51,6 +51,20 @@ export const zh = {
   'memory.saving': '保存中…',
   'memory.saved': '已保存',
   'memory.saveFailed': '保存失败',
+  'delete.menu': '删除',
+  'delete.title': '删除这个会话？',
+  'delete.body': '“{title}”的聊天记录会从本地磁盘删除，和它一起消失的还有索引与工作区登记。',
+  'delete.hint': '这一步不能撤销；只想让它从侧栏消失的话，用「归档会话」。',
+  'delete.confirm': '删除',
+  'delete.cancel': '取消',
+  'delete.busy': '正在删除…',
+  'delete.failed': '删除失败',
+  'delete.running': '会话还在运行，先停止再删。',
+  'delete.open': '这个会话还开着，先关掉它再删。',
+  'delete.notFound': '找不到这个会话的记录，可能已经被删掉了。',
+  'delete.ioError': '文件删除失败，可能被其他程序占用。',
+  'delete.timeout': '等太久了，没收到结果。',
+  'delete.refused': '设置通道拒绝了这次请求。',
   'remember.action': '记住',
   'remember.title': '记进长期记忆',
   'remember.subtitle': '勾选要提炼的消息，模型会把它们压成几条稳定的事实，追加到助理记忆里。',
@@ -74,8 +88,8 @@ export type ProfileKey = keyof typeof zh
 
 /** 英文词典：与中文键一一对应。 */
 export const en: Record<ProfileKey, string> = {
-  'panel': 'Assistant Profile',
-  'title': 'Assistant Profile',
+  'panel': 'Agent Assistant',
+  'title': 'Agent Assistant',
   'intro': 'This persona opens every new session: it rides the very top of the system prompt and applies to all four modes.',
   'name.label': 'Name',
   'name.placeholder': 'e.g. Big Fat Fish',
@@ -118,6 +132,20 @@ export const en: Record<ProfileKey, string> = {
   'memory.saving': 'Saving…',
   'memory.saved': 'Saved',
   'memory.saveFailed': 'Save failed',
+  'delete.menu': 'Delete',
+  'delete.title': 'Delete this session?',
+  'delete.body': 'The chat log of “{title}” will be deleted from local storage, along with its index rows and workspace registration.',
+  'delete.hint': 'This cannot be undone. To merely hide it from the sidebar, use Archive instead.',
+  'delete.confirm': 'Delete',
+  'delete.cancel': 'Cancel',
+  'delete.busy': 'Deleting…',
+  'delete.failed': 'Delete failed',
+  'delete.running': 'This session is still running. Stop it first.',
+  'delete.open': 'This session is still open. Close it first.',
+  'delete.notFound': 'No log found for this session; it may already be gone.',
+  'delete.ioError': 'Could not remove the files; another program may hold them.',
+  'delete.timeout': 'Timed out waiting for the result.',
+  'delete.refused': 'The settings channel refused the request.',
   'remember.action': 'Remember',
   'remember.title': 'Remember into long-term memory',
   'remember.subtitle': 'Tick the messages to distil; the model condenses them into a few stable facts and appends them to the assistant memory.',

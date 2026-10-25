@@ -1,5 +1,5 @@
 /**
- * 助理档案 · 宿主半端。
+ * Agent助理 · 宿主半端。
  *
  * 一个档案、一份人格、四个模式通用。人格的做法只有一件事：每个对话 agent 创建时，
  * 在这个 agent **自己的上下文**里注册一段 `deployment:persona-prefix`——作用域链上最近
@@ -39,8 +39,10 @@ import type {} from '@deepseek-ai/dsh-agent-preset-registry'
 
 import { DEFAULT_PERSONA } from './presets.ts'
 import { appendToText } from './memory.ts'
+import { deleteSession, type DeleteOutcome } from './session-delete.ts'
 
 export * from './memory.ts'
+export * from './session-delete.ts'
 
 /** Cordis 插件名。 */
 export const name = 'assistant-profile'
@@ -83,10 +85,15 @@ export interface Config {
    * 这条字段就是两侧唯一的呼叫通道。
    */
   rememberSignal: Volatile<string>
+  /**
+   * 会话删除的信箱，形状与 `rememberSignal` 相同（`phase: request` / `done`）：
+   * 侧栏行菜单写请求，宿主删完把结果写回。
+   */
+  deleteSignal: Volatile<string>
 }
 
 /**
- * 运行时 schema。字段都是 volatile：它们由「助理档案」页与「Agent记忆」设置页
+ * 运行时 schema。字段都是 volatile：它们由「Agent助理」页与「Agent记忆」设置页
  * 而不是插件配置页编辑，改动经设置通道写回 profile 的 patch，重启后仍在。默认值取
  * 内置「默认三」，所以装好就是一条带人设的鱼；三栏全部清空再保存，则什么都不注入。
  */
@@ -99,6 +106,7 @@ export const Config: z<Config> = z.object({
   autoMemory: z.boolean().default(false).description('Let the model write memories on its own judgment (requires memoryEnabled)').volatile(),
   memoryText: z.string().default('').description('The assistant memory document').volatile(),
   rememberSignal: z.string().default('').description('Browser-to-host mailbox for the remember button').volatile(),
+  deleteSignal: z.string().default('').description('Browser-to-host mailbox for the session delete action').volatile(),
 })
 
 /** 跨插件重载共享的当前配置引用：旧闭包也能读到新值。 */
@@ -357,7 +365,7 @@ function parseSignal(raw: string): RememberSignal | undefined {
 }
 
 /**
- * 助理档案服务：人格注入 + 单份长期记忆。
+ * Agent助理服务：人格注入 + 单份长期记忆。
  *
  * 记忆的存储、注入、两个开关、`memory_add` 工具与按钮提炼都在这里；客户端只负责
  * 设置页、聊天里的「记住」按钮和选择弹窗。
@@ -380,6 +388,12 @@ export default class AssistantProfile extends Service {
 
   /** 上一次处理过的请求 id，防止同一请求被重复执行。 */
   private lastRequestId: string | undefined
+
+  /** 删除信箱正在处理中。 */
+  private deleting = false
+
+  /** 上一次处理过的删除请求 id。 */
+  private lastDeleteId: string | undefined
 
   constructor(ctx: Context, public readonly config: Config) {
     // 注册成有名服务：Service 需要一个名字（无名的 provide 会落到 undefined 上）。
@@ -431,13 +445,13 @@ export default class AssistantProfile extends Service {
         // 对一次工具注册，否则运行中打开「自动记忆」永远不会把 memory_add 挂上。
         this.syncTool()
         void this.pumpRemember()
+        void this.pumpDelete()
       }, MAILBOX_POLL_MS)
       return () => { clearInterval(poller) }
     }, 'assistant-profile: mailbox poll')
 
     // 插件重载时若有未处理的请求，接着处理掉。
     this.schedulePump()
-
 
   }
 
@@ -584,6 +598,35 @@ export default class AssistantProfile extends Service {
    */
   private async publishSignal(signal: RememberSignal): Promise<boolean> {
     return await this.persist({ rememberSignal: JSON.stringify(signal) })
+  }
+
+  /** 检查删除信箱，有请求就删掉那个会话并把结果写回。 */
+  private async pumpDelete(): Promise<void> {
+    if (this.deleting) return
+    const signal = parseSignal(this.config.deleteSignal.get())
+    if (signal?.phase !== 'request' || signal.id === undefined) return
+    if (signal.id === this.lastDeleteId) return
+    this.deleting = true
+    this.lastDeleteId = signal.id
+    let outcome: DeleteOutcome
+    try {
+      outcome = deleteSession(this.ctx, signal.sessionId ?? '')
+    } catch (error) {
+      outcome = { ok: false, outcome: `failed: ${errorChain(error)}` }
+    }
+    try {
+      const published = await this.persist({
+        deleteSignal: JSON.stringify({
+          id: signal.id,
+          phase: 'done',
+          ok: outcome.ok,
+          outcome: outcome.outcome,
+        }),
+      })
+      if (!published) this.lastDeleteId = undefined
+    } finally {
+      this.deleting = false
+    }
   }
 
   /**

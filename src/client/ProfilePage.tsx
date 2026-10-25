@@ -1,5 +1,5 @@
 /**
- * 助理档案页：名称、语言、人格提示词三段，一次保存原子落盘。
+ * Agent助理页：名称、语言、人格提示词三段，一次保存原子落盘。
  *
  * 页面只编辑、不预览：真正的注入发生在宿主侧（每个新会话的系统提示首段），
  * 这里把「它会出现在哪里」写在每个字段的说明里，省掉一块会随时间漂移的假预览。
@@ -40,7 +40,7 @@ export type ProfilePageProps =
 const FIELDS = ['name', 'language', 'persona'] as const
 
 /**
- * 渲染助理档案页。
+ * 渲染Agent助理页。
  * @param props - 档案 store 与本地化文案。
  * @returns 页面元素。
  */
