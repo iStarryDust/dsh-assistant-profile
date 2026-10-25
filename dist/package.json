@@ -1,10 +1,17 @@
 {
   "name": "@istarry/dsh-assistant-profile",
-  "description": "助理档案：给 DSH 一份全局人格（名称 / 风格 / 语言 / 人格提示词），每个新会话的系统提示最前面都带着它；侧栏「新会话」上方显示助理名",
-  "version": "0.2.1",
+  "description": "助理档案：给 DSH 一份全局人格（名称 / 语言 / 人格提示词）与一份长期记忆，每个新会话的系统提示最前面都带着它；聊天里点一下就能把选中的对话提炼进记忆；侧栏「新会话」上方显示助理名",
+  "version": "0.6.0",
   "icon": "./icon.svg",
   "type": "module",
   "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -12,13 +19,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iStarryDust/dsh-assistant-profile.git"
-  },
-  "exports": {
-    ".": "./lib/index.js",
-    "./client": "./lib/client.js",
-    "./cordis.patch.yml": "./cordis.patch.yml",
-    "./locale/*.json": "./locale/*.json",
-    "./package.json": "./package.json"
   },
   "files": [
     "icon.svg",

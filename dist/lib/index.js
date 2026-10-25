@@ -1,4 +1,5 @@
 import z from "@deepseek-ai/schemastery";
+import { Service } from "@deepseek-ai/cordis";
 //#region ../tooling/node_modules/.pnpm/js-yaml@4.2.0/node_modules/js-yaml/dist/js-yaml.mjs
 /*! js-yaml 4.2.0 https://github.com/nodeca/js-yaml @license MIT */
 var __create = Object.create;
@@ -2407,13 +2408,113 @@ const DEFAULT_PERSONA = {
 	].join("\n")
 };
 //#endregion
+//#region ../.build/tsc/memory.js
+/**
+* 助理记忆的存储形态：**一段 markdown 文本**，存在本插件的配置字段里
+* （`memoryText`），而不是独立的文件。
+*
+* 为什么不用文件：记忆要能被设置页读写、能随 profile 持久化、能在注入时同步取到。
+* 官方设置通道（`configForms` → profile 的 Cordis patch）对**标量字段**支持最好，
+* 而自定义 RPC 需要 typert 生成物，那条路在本插件里没走通（client 半端加载器会跳过
+* 带生成 descriptors 的 bundle）。所以把整段文本当作一个配置项：编辑器保存 = 写配置，
+* 注入 = 读配置，重启后仍在，全程不经过远程调用。
+*
+* 文本形状与 agent-suite 的 memory.md 保持一致，便于以后迁移：
+* `# 标题` 之类的自由文本由用户写，每条记忆是一行 `- [YYYY-MM-DD HH:mm] 内容`。
+*
+* @module @istarry/dsh-assistant-profile/memory
+*/
+const ENTRY_RE = /^-?\s*\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\]\s*(.*)$/;
+/**
+* 把本地时间格式化成条目的时间戳。
+* @param date - 时间来源，测试可注入。
+* @returns `YYYY-MM-DD HH:mm`。
+*/
+function stampNow(date = /* @__PURE__ */ new Date()) {
+	const pad = (n) => String(n).padStart(2, "0");
+	return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+/**
+* 从文本里解析出所有记忆条目。
+* @param text - 整段记忆文本。
+* @returns 按出现顺序的条目。
+*/
+function parseEntries(text) {
+	const entries = [];
+	for (const line of text.split(/\r?\n/)) {
+		const match = ENTRY_RE.exec(line);
+		if (match === null) continue;
+		entries.push({
+			stamp: match[1] ?? "",
+			content: (match[2] ?? "").trim()
+		});
+	}
+	return entries;
+}
+/**
+* 去重比较键：大小写折叠、连续空白压成一个。
+* @param content - 条目内容。
+* @returns 规范键。
+*/
+function dedupeKey(content) {
+	return content.trim().toLowerCase().replace(/\s+/g, " ");
+}
+/**
+* 往整段记忆文本里追加一条事实，并对已有条目去重：
+* 同义条目刷新时间戳，否则追加新行；非条目行（标题、空行）原样保留。
+* @param text - 现有整段文本。
+* @param content - 要记住的事实。
+* @param at - 时间来源。
+* @returns 追加结果，含新文本。
+*/
+function appendToText(text, content, at = /* @__PURE__ */ new Date()) {
+	const trimmed = content.trim();
+	if (trimmed === "") return {
+		appended: false,
+		refreshed: false,
+		text
+	};
+	const stamp = stampNow(at);
+	const key = dedupeKey(trimmed);
+	const headerLines = [];
+	const entryLines = [];
+	for (const line of text.split(/\r?\n/)) if (ENTRY_RE.test(line)) entryLines.push(line);
+	else headerLines.push(line);
+	for (let index = 0; index < entryLines.length; index += 1) {
+		const match = ENTRY_RE.exec(entryLines[index]);
+		if (match === null) continue;
+		if (dedupeKey((match[2] ?? "").trim()) === key) {
+			entryLines[index] = `- [${stamp}] ${trimmed}`;
+			return {
+				appended: false,
+				refreshed: true,
+				text: compose(headerLines, entryLines)
+			};
+		}
+	}
+	entryLines.push(`- [${stamp}] ${trimmed}`);
+	return {
+		appended: true,
+		refreshed: false,
+		text: compose(headerLines, entryLines)
+	};
+}
+/** 拼回整段文本，顺手收掉标题块首尾的空行（避免反复追加时越积越多）。 */
+function compose(headerLines, entryLines) {
+	const meaningful = [...headerLines];
+	while (meaningful.length > 0 && /^\s*$/.test(meaningful[0])) meaningful.shift();
+	while (meaningful.length > 0 && /^\s*$/.test(meaningful[meaningful.length - 1])) meaningful.pop();
+	const body = [...meaningful, ...entryLines].join("\n");
+	return body.endsWith("\n") ? body : `${body}\n`;
+}
+//#endregion
 //#region ../.build/tsc/index.js
 /**
 * 助理档案 · 宿主半端。
 *
-* 一个档案、一份人格、四个模式通用。做法只有一件事：每个对话 agent 创建时，在这个
-* agent **自己的上下文**里注册一段 `deployment:persona-prefix`——作用域链上最近的
-* 同名段胜出，于是预设自带的身份句被档案替换，而工具、流程、模式语义一律不动。
+* 一个档案、一份人格、四个模式通用。人格的做法只有一件事：每个对话 agent 创建时，
+* 在这个 agent **自己的上下文**里注册一段 `deployment:persona-prefix`——作用域链上最近
+* 的同名段胜出，于是预设自带的身份句被档案替换，而工具、流程、模式语义一律不动。
 * 官方给子代理发独立人格走的正是这条路径（`dsh-subagent` 的 applyChildComposition），
 * 所以它对标准 / PTC / 极简 / 创造四种预设都成立，不用复制预设组合，也不用改模式
 * 选择器与会话绑定逻辑。
@@ -2421,9 +2522,18 @@ const DEFAULT_PERSONA = {
 * 极简模式的预设人格是「整段系统提示只有这一句」（complete: true）。遮蔽段必须镜像
 * 这个标记，否则会把它变成「全套工具说明 + 人格」，等于改掉了那个模式的定义。
 *
-* 文本是**每次组装提示词时求值**的，所以保存后已打开的会话下一句话就用新人格。是否
-* 因此重算前缀缓存由宿主判定：路由声明 `systemPromptUpdate: 'in-history'` 时，变化的
-* 系统提示会被追加在已缓存的历史之后，历史那段前缀仍然命中；否则从开头失效。
+* 文本是**每次组装提示词时求值**的，所以保存后已打开的会话下一句话就用新人格。
+*
+* ## 助理记忆
+*
+* 单档案所以单记忆：一份 markdown（见 `memory.ts`），以 `memory:assistant` 段注入，
+* order 500——排在人格（0）之后、工具目录（1000）之前：记忆描述的是「用户和我是什么
+* 关系」，工具说明会引用这些前提。段文本每次组装重读文件，所以编辑器保存后下一句话
+* 就带着新记忆。两个开关都是 volatile：设置页写、加载器就地提交、无需重挂。
+*
+* 模型主动记忆走 `memory_add` 工具，仅在「记忆开 + 自动记忆开」时注册；设置页重建
+* 注册靠监听 `loader/volatile-update`。按钮提取走 `rememberFromSession`：用该会话自己的
+* 模型把选中的对话文本提炼成条目后追加。
 *
 * @module @istarry/dsh-assistant-profile
 */
@@ -2433,18 +2543,25 @@ const name = "assistant-profile";
 const PERSONA_PREFIX_SECTION = "deployment:persona-prefix";
 /** 该段在提示词里的位置（宿主 SECTION_ORDERS.DEPLOYMENT_PERSONA_PREFIX）。 */
 const PERSONA_PREFIX_ORDER = 0;
+/** 记忆段的名字与位置：人格之后、工具目录（1000）之前。 */
+const MEMORY_SECTION = "memory:assistant";
+const MEMORY_ORDER = 500;
 /** 人格插件的包名，兼容没有 `id` 的旧写法。 */
 const PERSONA_PLUGIN_NAME = "@deepseek-ai/dsh-persona";
 /**
-* 运行时 schema。字段都是 volatile：它们由「助理档案」页而不是插件配置页编辑，
-* 改动经设置通道写回 profile 的 patch，重启后仍在。默认值取内置「默认三」，
-* 所以装好就是一条带人设的鱼；三栏全部清空再保存，则什么都不注入。
+* 运行时 schema。字段都是 volatile：它们由「助理档案」页与「Agent记忆」设置页
+* 而不是插件配置页编辑，改动经设置通道写回 profile 的 patch，重启后仍在。默认值取
+* 内置「默认三」，所以装好就是一条带人设的鱼；三栏全部清空再保存，则什么都不注入。
 */
 const Config = z.object({
 	name: z.string().default(DEFAULT_PERSONA.name).volatile(),
 	language: z.string().default(DEFAULT_PERSONA.language).volatile(),
 	persona: z.string().default(DEFAULT_PERSONA.persona).volatile(),
-	customsJson: z.string().default("[]").volatile()
+	customsJson: z.string().default("[]").volatile(),
+	memoryEnabled: z.boolean().default(true).description("Inject the assistant memory into the system prompt").volatile(),
+	autoMemory: z.boolean().default(false).description("Let the model write memories on its own judgment (requires memoryEnabled)").volatile(),
+	memoryText: z.string().default("").description("The assistant memory document").volatile(),
+	rememberSignal: z.string().default("").description("Browser-to-host mailbox for the remember button").volatile()
 });
 /** 跨插件重载共享的当前配置引用：旧闭包也能读到新值。 */
 const LIVE = Symbol.for("dsh.assistant-profile.config");
@@ -2463,7 +2580,7 @@ function text(value) {
 	return trimmed === void 0 || trimmed === "" ? void 0 : trimmed;
 }
 /**
-* 把档案渲染成系统提示的首段。四段空行分隔、各自可缺省；全空时返回空串，
+* 把档案渲染成系统提示的首段。三段空行分隔、各自可缺省；全空时返回空串，
 * 由调用方回落到预设自带的身份。
 * @returns 人格文本。
 */
@@ -2532,7 +2649,7 @@ async function basePersonaOf(ctx, agentPreset) {
 * @param ctx - 插件上下文。
 * @param agent - 新建（或恢复）的 agent。
 */
-async function install(ctx, agent) {
+async function installPersona(ctx, agent) {
 	if (agent.session.header.origin === "subagent") return;
 	const agentCtx = agent.ctx;
 	const presetId = ctx.get("agentPresets")?.composedPreset(agentCtx);
@@ -2551,24 +2668,361 @@ async function install(ctx, agent) {
 		...base?.complete === true ? { complete: true } : {}
 	});
 }
+const MEMORY_ADD_DESCRIPTION = "Add one fact to the assistant's long-term memory when the conversation reveals something worth remembering across future sessions: stable preferences, work habits, durable decisions, or facts the human stated as lasting. Remember prose conclusions, not the raw exchange; merge related facts into one entry. Do not store credentials, one-off task details, or anything the human said is transient.";
+/** `memory_add` 的输出结构。 */
+const MEMORY_ADD_VALUE_SCHEMA = {
+	type: "object",
+	additionalProperties: false,
+	properties: {
+		saved: {
+			type: "boolean",
+			required: true
+		},
+		outcome: { type: "string" },
+		content: { type: "string" }
+	}
+};
+/** 把选中的对话文本提炼成记忆条目的指令（与 agent-suite 一致的规则）。 */
+const REMEMBER_INSTRUCTION = "你是一个长期记忆提炼引擎。用户从对话中圈选了下面这段内容，明确希望把它记入助手的长期记忆。请把这些内容提炼成简短、稳定、可跨会话复用的记忆条目。\n规则：\n- 每行输出一条记忆内容本身（不带时间戳、不带 \"- \" 前缀、不带编号）。\n- 用户既然圈选了它，请默认提取出其中明确、稳定的信息：称呼、偏好、习惯、约定、身份事实、项目背景。\n- 把相关事实合并成一条；不要逐字复述，只提炼结论，但保留关键名称、数字、关系。\n- 只有当整段内容完全是临时任务细节或含凭据、密钥时，才不输出条目（此时只输出一个真正的空行）。\n- 用与对话片段一致的语言书写（对话是中文就用中文，是英文就用英文）。\n- 严禁输出\"空行\"\"（空行）\"\"无\"\"没有\"\"none\"之类的占位文字。";
+/** 设置命名空间 = 本插件在 profile 里的条目 id。 */
+const SETTINGS_NS = "assistant-profile";
+/** 信箱里一次请求最多带多少字符（别把超长选区写进 profile 的 patch）。 */
+const REMEMBER_TEXT_LIMIT = 2e4;
+/** 信箱轮询间隔：0.7s 读一次字符串字段，人感觉不到延迟。 */
+const MAILBOX_POLL_MS = 700;
 /**
-* 挂载宿主半端：把人格装到每个新建 agent 上，并登记自己的设置入口。
-* @param ctx - 宿主根上下文。
-* @param config - 档案四个字段。
+* 一条用户消息。按线上形状手搭而不是引 `@deepseek-ai/dsh-llm`：宿主那边的包在插件
+* 目录里解析不到（只有 cordis 与 schemastery 两端共享），而消息只是 role/content/id
+* 三个字段的纯数据。
+* @param text - 消息正文。
+* @returns 可直接交给 llm.stream 的用户消息。
 */
-function apply(ctx, config) {
-	live.config = config;
-	ctx.inject(["settings"], (child) => {
-		child.effect(() => child.settings.configure({ auto: false }, ctx.fiber));
-	});
-	const reinstall = (agent) => install(ctx, agent).catch((error) => {
-		ctx.logger.warn(`assistant-profile: persona install failed: ${String(error)}`);
-	});
-	ctx.effect(() => ctx.on("agent/created", ({ agent }) => reinstall(agent)), "assistant-profile: persona");
-	ctx.effect(() => ctx.on("agent-preset/selected", (sessionId) => {
-		const agent = ctx.get("agents")?.get(String(sessionId));
-		if (agent !== void 0) reinstall(agent);
-	}), "assistant-profile: preset switch");
+function userMessage(text) {
+	return {
+		id: crypto.randomUUID(),
+		role: "user",
+		content: [{
+			type: "text",
+			text
+		}],
+		source: { kind: "user" }
+	};
+}
+/**
+* 解析信箱字段；坏数据当空（宁可什么都不做，也不误跑一次）。
+* @param raw - 字段原文。
+* @returns 解析出的信号。
+*/
+function parseSignal(raw) {
+	if (raw.trim() === "") return void 0;
+	try {
+		const parsed = JSON.parse(raw);
+		if (typeof parsed !== "object" || parsed === null) return void 0;
+		return parsed;
+	} catch {
+		return;
+	}
+}
+/**
+* 助理档案服务：人格注入 + 单份长期记忆。
+*
+* 记忆的存储、注入、两个开关、`memory_add` 工具与按钮提炼都在这里；客户端只负责
+* 设置页、聊天里的「记住」按钮和选择弹窗。
+*
+* 按钮提炼没有自定义 RPC：浏览器把「要提炼哪段文本」写进 `rememberSignal`
+* （`phase: request`），宿主在 `loader/volatile-update` 里接手，用该会话自己的模型
+* 跑一次提炼，把结果写回同一个字段（`phase: done`）。写入统一走设置服务，所以记忆
+* 与它一样落进 profile 的 patch。
+*/
+var AssistantProfile = class extends Service {
+	config;
+	static inject = [
+		"systemPrompt",
+		"tools",
+		"llm"
+	];
+	static Config = Config;
+	/** `memory_add` 工具的注册 disposer，只在开关允许时存在。 */
+	toolDisposer;
+	/** 正在处理一次按钮提炼：同一时间只跑一个。 */
+	remembering = false;
+	/** 上一次处理过的请求 id，防止同一请求被重复执行。 */
+	lastRequestId;
+	constructor(ctx, config) {
+		super(ctx, "assistantProfile");
+		this.config = config;
+		live.config = config;
+		ctx.inject(["settings"], (child) => {
+			child.effect(() => child.settings.configure({ auto: false }, ctx.fiber));
+		});
+		ctx.effect(() => ctx.systemPrompt.section({
+			name: MEMORY_SECTION,
+			order: MEMORY_ORDER,
+			text: () => {
+				if (config.memoryEnabled.get() !== true) return "";
+				return config.memoryText.get().trim();
+			}
+		}), "assistant-profile: memory section");
+		const reinstall = (agent) => installPersona(ctx, agent).catch((error) => {
+			ctx.logger.warn(`assistant-profile: persona install failed: ${String(error)}`);
+		});
+		ctx.effect(() => ctx.on("agent/created", ({ agent }) => {
+			reinstall(agent);
+		}), "assistant-profile: persona");
+		ctx.effect(() => ctx.on("agent-preset/selected", (sessionId) => {
+			const agent = ctx.get("agents")?.get(String(sessionId));
+			if (agent !== void 0) reinstall(agent);
+		}), "assistant-profile: preset switch");
+		this.syncTool();
+		ctx.on("loader/volatile-update", () => {
+			this.syncTool();
+			this.schedulePump();
+		});
+		ctx.effect(() => {
+			const poller = setInterval(() => {
+				this.pumpRemember();
+			}, MAILBOX_POLL_MS);
+			return () => {
+				clearInterval(poller);
+			};
+		}, "assistant-profile: mailbox poll");
+		this.schedulePump();
+	}
+	/** 按当前开关注册或撤下 `memory_add` 工具。 */
+	syncTool() {
+		const want = this.config.memoryEnabled.get() === true && this.config.autoMemory.get() === true;
+		if (want && this.toolDisposer === void 0) this.toolDisposer = this.registerTool();
+		else if (!want && this.toolDisposer !== void 0) {
+			this.toolDisposer();
+			this.toolDisposer = void 0;
+		}
+	}
+	/** 注册模型侧的记忆工具，返回撤下函数。 */
+	registerTool() {
+		const ctx = this.ctx;
+		const disposer = ctx.tools.register({
+			name: "memory_add",
+			description: MEMORY_ADD_DESCRIPTION,
+			parameters: {
+				type: "object",
+				additionalProperties: false,
+				properties: { text: {
+					type: "string",
+					description: "The stable fact to remember, in its final prose form."
+				} },
+				required: ["text"]
+			},
+			output: {
+				schema: MEMORY_ADD_VALUE_SCHEMA,
+				render: (_args, value) => {
+					const v = value;
+					if (v.saved) return [{
+						type: "text",
+						text: `记住：${v.content ?? ""}`
+					}];
+					return [{
+						type: "text",
+						text: `未记住：${v.outcome ?? "未启用"}`
+					}];
+				}
+			},
+			execute: async (args) => {
+				const trimmed = (typeof args.text === "string" ? args.text : "").trim();
+				if (trimmed === "") return {
+					saved: false,
+					outcome: "empty fact"
+				};
+				const result = appendToText(this.config.memoryText.get(), trimmed);
+				await this.writeMemory(result.text);
+				return {
+					saved: true,
+					content: result.content,
+					outcome: result.appended ? "appended" : result.refreshed ? "refreshed" : "unchanged"
+				};
+			}
+		});
+		const teardown = () => {
+			disposer();
+			this.toolDisposer = void 0;
+		};
+		ctx.effect(() => teardown, "assistant-profile: memory tool");
+		return () => {
+			disposer();
+		};
+	}
+	/**
+	* 把一段记忆文本落进配置。只能经设置服务写：`Volatile` 只暴露 `get()`，
+	* 宿主没有权限直接改自己的配置引用；写入经它之后，加载器会把新值就地提交进
+	* 运行时引用（下一次组装提示词就读到），并落进 profile 的 patch。
+	* @param next - 新的整段文本。
+	*/
+	async writeMemory(next) {
+		await this.persist({ memoryText: next });
+	}
+	/**
+	* 经设置服务写回本插件的 volatile 字段。
+	* @param patch - 要写入的字段。
+	* @returns 是否写成功（失败只记日志，由调用方决定要不要重试）。
+	*/
+	async persist(patch) {
+		const settings = this.ctx.get("settings");
+		if (settings === void 0) return false;
+		try {
+			await settings.update(SETTINGS_NS, patch);
+			return true;
+		} catch (error) {
+			this.ctx.logger.warn(`assistant-profile: persist failed: ${String(error)}`);
+			return false;
+		}
+	}
+	/**
+	* 把一次信箱处理排到当前事务之外。
+	*
+	* 设置写入本身跑在 HMR 事务里（`hmr.runExclusive`），而写回结果又要经设置服务再开
+	* 一个事务——直接调用会撞上「HMR transactions cannot be nested」。所以触发点统一
+	* 用 `setTimeout(0)` 推到事务之外，轮询那条路天然在事务外。
+	*/
+	schedulePump() {
+		setTimeout(() => {
+			this.pumpRemember();
+		}, 0);
+	}
+	/**
+	* 检查信箱里有没有新请求，有就跑一次提炼并写回结果。
+	*
+	* 这里绝不向外抛：调用方是 `void`，一次未捕获的拒绝会被加载器当成插件加载失败。
+	*/
+	async pumpRemember() {
+		if (this.remembering) return;
+		const signal = parseSignal(this.config.rememberSignal.get());
+		if (signal?.phase !== "request" || signal.id === void 0) return;
+		if (signal.id === this.lastRequestId) return;
+		this.remembering = true;
+		this.lastRequestId = signal.id;
+		let result;
+		try {
+			result = await this.remember(signal.sessionId ?? "", signal.text ?? "");
+		} catch (error) {
+			result = {
+				saved: false,
+				outcome: `failed: ${errorChain(error)}`
+			};
+		}
+		try {
+			if (!await this.publishSignal({
+				id: signal.id,
+				phase: "done",
+				saved: result.saved,
+				entries: result.entries,
+				outcome: result.outcome
+			})) this.lastRequestId = void 0;
+		} finally {
+			this.remembering = false;
+		}
+	}
+	/**
+	* 把结果写回信箱（同一个字段），浏览器据此结束等待。
+	* @param signal - 带结果的信箱内容。
+	*/
+	async publishSignal(signal) {
+		return await this.persist({ rememberSignal: JSON.stringify(signal) });
+	}
+	/**
+	* 用该会话自己的模型把选中的对话文本提炼成记忆条目并追加。
+	*
+	* 会话必须还在线（agent 提供模型配置）；提炼不写入对话历史，只发一次独立请求。
+	* @param sessionId - 执行提炼的会话。
+	* @param text - 选中的对话文本。
+	* @returns 是否记住了、记住了什么、或失败原因。
+	*/
+	async remember(sessionId, text) {
+		const trimmed = text.trim().slice(0, REMEMBER_TEXT_LIMIT);
+		if (trimmed === "") return {
+			saved: false,
+			outcome: "empty selection"
+		};
+		const agent = this.ctx.get("agents")?.get(sessionId);
+		if (agent === void 0) return {
+			saved: false,
+			outcome: "session not open"
+		};
+		const callConfig = agent.session.requestHeader?.()?.config;
+		if (callConfig === void 0) return {
+			saved: false,
+			outcome: "no provider/model available"
+		};
+		const llm = this.ctx.llm;
+		let output = "";
+		let failure;
+		try {
+			for await (const chunk of llm.stream({
+				...callConfig,
+				messages: [userMessage(trimmed), userMessage(REMEMBER_INSTRUCTION)],
+				sessionId: agent.session.id
+			})) if (chunk.type === "text-delta" && typeof chunk.text === "string") output += chunk.text;
+			else if (chunk.type === "finish") {
+				const kind = chunk.reason?.kind;
+				if (kind === "error" || kind === "aborted") failure = `analysis ${kind}: ${errorChain(chunk.reason?.failure)}`;
+				else if (kind === "max-tokens") failure = "analysis truncated at the token cap";
+			}
+		} catch (error) {
+			return {
+				saved: false,
+				outcome: `analysis failed: ${errorChain(error)}`
+			};
+		}
+		if (failure !== void 0) return {
+			saved: false,
+			outcome: failure
+		};
+		const entries = splitLines(output);
+		if (entries.length === 0) return {
+			saved: false,
+			outcome: "nothing worth remembering"
+		};
+		let next = this.config.memoryText.get();
+		for (const entry of entries) next = appendToText(next, entry).text;
+		await this.writeMemory(next);
+		return {
+			saved: true,
+			entries,
+			outcome: `remembered ${String(entries.length)}`
+		};
+	}
+};
+/** 把错误及其 cause 链压成一行。 */
+function errorChain(error) {
+	const parts = [];
+	let current = error;
+	while (typeof current === "object" && current !== null && parts.length < 4) {
+		const message = current.message;
+		if (typeof message !== "string" || message === "") break;
+		parts.push(message);
+		current = current.cause;
+	}
+	return parts.join(" | ");
+}
+/** 把模型输出拆成一行一条记忆（去列表前缀、丢空行、丢占位词）。 */
+function splitLines(text) {
+	const entries = [];
+	for (const raw of text.split(/\r?\n/)) {
+		const line = stripInvisible(raw.trim().replace(/^[-*]\s+/, "").trim());
+		if (line === "") continue;
+		if (isVacuousEntry(line)) continue;
+		entries.push(line);
+	}
+	return entries;
+}
+/** 去掉模型可能在正文周围吐出的不可见字符。 */
+function stripInvisible(value) {
+	return value.replace(/[\u0000-\u001F\u007F-\u009F\u00A0\u00AD\u1680\u2000-\u200B\u2028-\u202F\u205F-\u206F\u3000\uFEFF\uFFFD]/g, "").trim();
+}
+/** 这一行是不是「没有内容」的占位词。 */
+function isVacuousEntry(line) {
+	const cleaned = stripInvisible(line);
+	if (cleaned === "") return true;
+	const normalized = cleaned.toLowerCase().replace(/[\s（）()「」"'　\-*—–]+/g, "");
+	return normalized === "" || normalized === "空行" || normalized === "无" || normalized === "没有" || normalized === "无内容" || normalized === "无值得记住的内容" || normalized === "暂无" || normalized === "none" || normalized === "no" || normalized === "nothing" || normalized === "na" || normalized === "n/a";
 }
 //#endregion
-export { Config, apply, name, renderPersona };
+export { Config, MEMORY_SECTION, appendToText, dedupeKey, AssistantProfile as default, isVacuousEntry, name, parseEntries, renderPersona, stampNow, stripInvisible };

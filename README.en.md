@@ -1,6 +1,6 @@
 # Assistant Profile · dsh-assistant-profile
 
-One **global persona** for DeepSeek Harness: name, language, and persona prompt. Install it once and every new session opens with it at the very top of the system prompt. The sidebar shows the assistant's name above New Session.
+One **global persona** and one **long-term memory** for DeepSeek Harness: name, language, persona prompt, and a memory that rides right behind the persona in every system prompt. Install it once and every new session opens with it at the very top of the system prompt. The sidebar shows the assistant's name above New Session.
 
 One profile, all four modes (standard / PTC / minimal / creator). No preset duplication, no mode-picker override.
 
@@ -23,6 +23,28 @@ Reply in 简体中文 throughout.
 - **Minimal mode** treats the persona as the complete system prompt (`complete: true`). The shadowing section mirrors that flag, so minimal mode's prompt becomes *only* your persona — still no tool instructions, exactly as that mode is designed.
 - With all four fields empty it falls back to the preset's own text, i.e. native behaviour.
 - **Subagents are left alone**: a delegated child keeps its own persona.
+
+## Assistant memory
+
+One profile means one memory: a markdown document (one `- [YYYY-MM-DD HH:mm] content` line per fact) stored with the profile alongside the persona, shared by every session.
+
+**Where it lands**: section `memory:assistant`, order 500 — after the persona (0), before the tool catalog (1000). Memory states who the user and the assistant are, which the tool descriptions then assume.
+
+**Three ways in**:
+
+- **The Remember button in chat**: every assistant message's action strip (beside the official like/dislike pair) gains a ✨. It opens a picker listing the session's user/assistant messages; submit and the host runs **that session's own model** once to condense the selection into a few stable facts, appending each (an identical fact only refreshes its stamp instead of piling up).
+- **Settings → Agent memory**: two switches (memory / auto memory) and an editor. Hand-written edits land on save.
+- **The `memory_add` tool**: registered only while both switches are on, letting the model decide what to remember mid-conversation.
+
+Extraction is fail-closed: an offline session, a missing model configuration, or a model that returns nothing writable leaves the store untouched and reports the reason in the dialog.
+
+### Three pitfalls worth knowing before touching this
+
+1. **A plugin cannot write its own config.** `Volatile` exposes `get()` only; writes must go through the settings service (`settings.update(ns, patch)`), which persists to the profile patch and lets the loader commit the new value back into the runtime reference.
+2. **Write-backs must escape the HMR transaction.** A settings write runs inside `hmr.runExclusive`, and writing the result back opens another transaction — calling it inline throws `HMR transactions cannot be nested`. Every trigger therefore goes through `setTimeout(0)`.
+3. **Settings writes do not emit `loader/volatile-update`** (measured: the value commits into the reference, the event never fires). The mailbox is polled every 700 ms instead — one string read, one JSON check when idle.
+
+Because `@deepseek-ai/dsh-tools` / `dsh-llm` / `dsh-session` do not resolve from the plugin directory (only `cordis` is host-provided), the tool definition and the extraction messages are hand-built to the official wire shapes rather than imported.
 
 ## Editing the persona does not recompute history
 
