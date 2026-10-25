@@ -2669,18 +2669,23 @@ async function installPersona(ctx, agent) {
 	});
 }
 const MEMORY_ADD_DESCRIPTION = "Add one fact to the assistant's long-term memory when the conversation reveals something worth remembering across future sessions: stable preferences, work habits, durable decisions, or facts the human stated as lasting. Remember prose conclusions, not the raw exchange; merge related facts into one entry. Do not store credentials, one-off task details, or anything the human said is transient.";
-/** `memory_add` 的输出结构。 */
+/**
+* `memory_add` 的输出结构。
+*
+* 这是**输出值**的 JSON Schema，不是工具参数的 `defineTool` 方言：`required` 必须是
+* 对象层上的字符串数组，写成属性上的 `required: true` 会被宿主的 JSON Schema 校验器
+* 拒绝（`unsupported JSON schema: ... required is not supported on type "boolean"`），
+* 而注册失败只会让工具消失——不报给用户。
+*/
 const MEMORY_ADD_VALUE_SCHEMA = {
 	type: "object",
 	additionalProperties: false,
 	properties: {
-		saved: {
-			type: "boolean",
-			required: true
-		},
+		saved: { type: "boolean" },
 		outcome: { type: "string" },
 		content: { type: "string" }
-	}
+	},
+	required: ["saved"]
 };
 /** 把选中的对话文本提炼成记忆条目的指令（与 agent-suite 一致的规则）。 */
 const REMEMBER_INSTRUCTION = "你是一个长期记忆提炼引擎。用户从对话中圈选了下面这段内容，明确希望把它记入助手的长期记忆。请把这些内容提炼成简短、稳定、可跨会话复用的记忆条目。\n规则：\n- 每行输出一条记忆内容本身（不带时间戳、不带 \"- \" 前缀、不带编号）。\n- 用户既然圈选了它，请默认提取出其中明确、稳定的信息：称呼、偏好、习惯、约定、身份事实、项目背景。\n- 把相关事实合并成一条；不要逐字复述，只提炼结论，但保留关键名称、数字、关系。\n- 只有当整段内容完全是临时任务细节或含凭据、密钥时，才不输出条目（此时只输出一个真正的空行）。\n- 用与对话片段一致的语言书写（对话是中文就用中文，是英文就用英文）。\n- 严禁输出\"空行\"\"（空行）\"\"无\"\"没有\"\"none\"之类的占位文字。";
@@ -2780,6 +2785,7 @@ var AssistantProfile = class extends Service {
 		});
 		ctx.effect(() => {
 			const poller = setInterval(() => {
+				this.syncTool();
 				this.pumpRemember();
 			}, MAILBOX_POLL_MS);
 			return () => {
@@ -2800,47 +2806,53 @@ var AssistantProfile = class extends Service {
 	/** 注册模型侧的记忆工具，返回撤下函数。 */
 	registerTool() {
 		const ctx = this.ctx;
-		const disposer = ctx.tools.register({
-			name: "memory_add",
-			description: MEMORY_ADD_DESCRIPTION,
-			parameters: {
-				type: "object",
-				additionalProperties: false,
-				properties: { text: {
-					type: "string",
-					description: "The stable fact to remember, in its final prose form."
-				} },
-				required: ["text"]
-			},
-			output: {
-				schema: MEMORY_ADD_VALUE_SCHEMA,
-				render: (_args, value) => {
-					const v = value;
-					if (v.saved) return [{
-						type: "text",
-						text: `记住：${v.content ?? ""}`
-					}];
-					return [{
-						type: "text",
-						text: `未记住：${v.outcome ?? "未启用"}`
-					}];
+		let disposer;
+		try {
+			disposer = ctx.tools.register({
+				name: "memory_add",
+				description: MEMORY_ADD_DESCRIPTION,
+				parameters: {
+					type: "object",
+					additionalProperties: false,
+					properties: { text: {
+						type: "string",
+						description: "The stable fact to remember, in its final prose form."
+					} },
+					required: ["text"]
+				},
+				output: {
+					schema: MEMORY_ADD_VALUE_SCHEMA,
+					render: (_args, value) => {
+						const v = value;
+						if (v.saved) return [{
+							type: "text",
+							text: `记住：${v.content ?? ""}`
+						}];
+						return [{
+							type: "text",
+							text: `未记住：${v.outcome ?? "未启用"}`
+						}];
+					}
+				},
+				execute: async (args) => {
+					const trimmed = (typeof args.text === "string" ? args.text : "").trim();
+					if (trimmed === "") return {
+						saved: false,
+						outcome: "empty fact"
+					};
+					const result = appendToText(this.config.memoryText.get(), trimmed);
+					await this.writeMemory(result.text);
+					return {
+						saved: true,
+						content: result.content,
+						outcome: result.appended ? "appended" : result.refreshed ? "refreshed" : "unchanged"
+					};
 				}
-			},
-			execute: async (args) => {
-				const trimmed = (typeof args.text === "string" ? args.text : "").trim();
-				if (trimmed === "") return {
-					saved: false,
-					outcome: "empty fact"
-				};
-				const result = appendToText(this.config.memoryText.get(), trimmed);
-				await this.writeMemory(result.text);
-				return {
-					saved: true,
-					content: result.content,
-					outcome: result.appended ? "appended" : result.refreshed ? "refreshed" : "unchanged"
-				};
-			}
-		});
+			});
+		} catch (error) {
+			ctx.logger.warn(`assistant-profile: memory_add registration failed: ${String(error)}`);
+			return () => {};
+		}
 		const teardown = () => {
 			disposer();
 			this.toolDisposer = void 0;

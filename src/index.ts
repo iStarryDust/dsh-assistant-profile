@@ -257,15 +257,23 @@ const MEMORY_ADD_DESCRIPTION =
   + 'conclusions, not the raw exchange; merge related facts into one entry. Do not '
   + 'store credentials, one-off task details, or anything the human said is transient.'
 
-/** `memory_add` 的输出结构。 */
+/**
+ * `memory_add` 的输出结构。
+ *
+ * 这是**输出值**的 JSON Schema，不是工具参数的 `defineTool` 方言：`required` 必须是
+ * 对象层上的字符串数组，写成属性上的 `required: true` 会被宿主的 JSON Schema 校验器
+ * 拒绝（`unsupported JSON schema: ... required is not supported on type "boolean"`），
+ * 而注册失败只会让工具消失——不报给用户。
+ */
 const MEMORY_ADD_VALUE_SCHEMA = {
   type: 'object',
   additionalProperties: false,
   properties: {
-    saved: { type: 'boolean', required: true },
+    saved: { type: 'boolean' },
     outcome: { type: 'string' },
     content: { type: 'string' },
   },
+  required: ['saved'],
 } as const
 
 /** 把选中的对话文本提炼成记忆条目的指令（与 agent-suite 一致的规则）。 */
@@ -418,7 +426,12 @@ export default class AssistantProfile extends Service {
     // 但没有那次事件），所以信箱靠一次轻量轮询来取：每 700ms 读一个字符串字段，
     // 没有新请求时就是一次 JSON 判定。
     ctx.effect(() => {
-      const poller = setInterval(() => { void this.pumpRemember() }, MAILBOX_POLL_MS)
+      const poller = setInterval(() => {
+        // 开关和信箱一样走设置通道，而设置写入不会发 volatile-update：轮询里一并
+        // 对一次工具注册，否则运行中打开「自动记忆」永远不会把 memory_add 挂上。
+        this.syncTool()
+        void this.pumpRemember()
+      }, MAILBOX_POLL_MS)
       return () => { clearInterval(poller) }
     }, 'assistant-profile: mailbox poll')
 
@@ -445,7 +458,9 @@ export default class AssistantProfile extends Service {
     const ctx = this.ctx
     // 直接给官方 ToolDefinition 的形状：defineTool 只是把参数说明翻成 JSON Schema
     // 再加一层参数校验，这里参数只有一个必填字符串，用不上那层机器。
-    const disposer = ctx.tools.register({
+    let disposer: () => void
+    try {
+      disposer = ctx.tools.register({
       name: 'memory_add',
       description: MEMORY_ADD_DESCRIPTION,
       parameters: {
@@ -480,6 +495,11 @@ export default class AssistantProfile extends Service {
         }
       },
     } as never)
+    } catch (error) {
+      // 注册失败只会让工具静默消失（模型既不自动记、也没法被要求记），必须留痕。
+      ctx.logger.warn(`assistant-profile: memory_add registration failed: ${String(error)}`)
+      return () => {}
+    }
     const teardown = () => { disposer(); this.toolDisposer = undefined }
     ctx.effect(() => teardown, 'assistant-profile: memory tool')
     return () => { disposer() }
