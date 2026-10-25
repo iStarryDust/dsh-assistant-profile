@@ -1,5 +1,5 @@
 /**
- * 词典：助理档案页与侧栏入口的文案。
+ * 词典：Agent助理页与侧栏入口的文案。
  *
  * 只放界面文案——名称、语言、人格是用户自己的内容，不进词典；
  * 三个内置人格的标签是产品名，也在这里。
@@ -7,8 +7,8 @@
 
 /** 中文词典（键的来源）。 */
 export const zh = {
-  'panel': '助理档案',
-  'title': '助理档案',
+  'panel': 'Agent助理',
+  'title': 'Agent助理',
   'intro': '这份人格会出现在每个新会话的系统提示最前面，标准 / PTC / 极简 / 创造四个模式通用。',
   'name.label': '名称',
   'name.placeholder': '例如：大肥鱼',
@@ -88,8 +88,8 @@ export type ProfileKey = keyof typeof zh
 
 /** 英文词典：与中文键一一对应。 */
 export const en: Record<ProfileKey, string> = {
-  'panel': 'Assistant Profile',
-  'title': 'Assistant Profile',
+  'panel': 'Agent Assistant',
+  'title': 'Agent Assistant',
   'intro': 'This persona opens every new session: it rides the very top of the system prompt and applies to all four modes.',
   'name.label': 'Name',
   'name.placeholder': 'e.g. Big Fat Fish',

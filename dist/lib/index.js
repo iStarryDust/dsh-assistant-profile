@@ -2652,7 +2652,7 @@ function deleteSession(ctx, sessionId) {
 //#endregion
 //#region ../.build/tsc/index.js
 /**
-* 助理档案 · 宿主半端。
+* Agent助理 · 宿主半端。
 *
 * 一个档案、一份人格、四个模式通用。人格的做法只有一件事：每个对话 agent 创建时，
 * 在这个 agent **自己的上下文**里注册一段 `deployment:persona-prefix`——作用域链上最近
@@ -2691,7 +2691,7 @@ const MEMORY_ORDER = 500;
 /** 人格插件的包名，兼容没有 `id` 的旧写法。 */
 const PERSONA_PLUGIN_NAME = "@deepseek-ai/dsh-persona";
 /**
-* 运行时 schema。字段都是 volatile：它们由「助理档案」页与「Agent记忆」设置页
+* 运行时 schema。字段都是 volatile：它们由「Agent助理」页与「Agent记忆」设置页
 * 而不是插件配置页编辑，改动经设置通道写回 profile 的 patch，重启后仍在。默认值取
 * 内置「默认三」，所以装好就是一条带人设的鱼；三栏全部清空再保存，则什么都不注入。
 */
@@ -2872,7 +2872,7 @@ function parseSignal(raw) {
 	}
 }
 /**
-* 助理档案服务：人格注入 + 单份长期记忆。
+* Agent助理服务：人格注入 + 单份长期记忆。
 *
 * 记忆的存储、注入、两个开关、`memory_add` 工具与按钮提炼都在这里；客户端只负责
 * 设置页、聊天里的「记住」按钮和选择弹窗。

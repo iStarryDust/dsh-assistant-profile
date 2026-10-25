@@ -1,7 +1,7 @@
 /**
- * 助理档案 · 浏览器半端。
+ * Agent助理 · 浏览器半端。
  *
- * 三件事：侧栏「插件」下面多一行「助理档案」；点开是主区的一个页面（名称 / 风格 /
+ * 三件事：侧栏「插件」下面多一行「Agent助理」；点开是主区的一个页面（名称 / 风格 /
  * 语言 / 人格提示词）；「新会话」按钮上方显示助理名。
  *
  * 数据不经过自定义 RPC：档案就是本插件在 profile 里的配置字段，页面通过官方设置
@@ -31,7 +31,7 @@ import { en, zh, type ProfileKey } from './locales.ts'
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {
   interface LocaleNamespaceMap {
-    /** 助理档案页与侧栏入口的文案。 */
+    /** Agent助理页与侧栏入口的文案。 */
     assistantProfile: ProfileKey
   }
 }
@@ -49,7 +49,7 @@ const PANEL_ORDER = 5
 export const inject = ['slots', 'locale', 'configForms']
 
 /**
- * 挂载助理档案的界面。
+ * 挂载Agent助理的界面。
  * @param ctx - 浏览器根上下文。
  */
 export function apply(ctx: ClientContext): void {
