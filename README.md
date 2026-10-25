@@ -46,6 +46,21 @@ Reply in 简体中文 throughout.
 
 因为插件目录里解析不到 `@deepseek-ai/dsh-tools` / `dsh-llm` / `dsh-session`（只有 `cordis` 由宿主提供），工具定义与提炼用的消息都按官方线上形状**手搭**，不 import 这几个包。
 
+## 删除会话
+
+侧栏任意会话行的「…」菜单里多一行**删除**（红色，带分隔线，排在「复制 Session ID」之后）。确认后删的是这个会话本身：
+
+- **磁盘**：`<DSH_HOME>/sessions/<项目>/<会话 id>/` 整个目录（日志、分代文件一起），
+- **索引**：会话查询里那一行（下次搜索不会再出现），
+- **登记**：工作区里对这个会话的记账，
+- **界面**：宿主发 `api-session/removed`，官方 session-controller 收到后把行从侧栏移除。
+
+正在运行的会话会被拒绝（先停止），空闲但还开着的会话会先被摘下再删。
+
+### 为什么不是调一个 `remove()` 就完事
+
+这一版 harness 的 `sessionPersistence` **没有**删除方法，`locate` / `listArtifacts` 的第一个参数又是 options（里面装 `signal`）——把会话 id 传进去会走进 `signal?.throwIfAborted()`，直接把宿主带崩（实测 `fatal load failure`）。所以删除按目录布局自己做，只认 `<root>/<项目>/<会话 id>` 这一种形状；命中不到就返回「找不到」，宁可不动手。
+
 ## 改人格不会重算历史
 
 DeepSeek 的上下文缓存是前缀缓存：系统提示在最前面，直接改写开头那条会让后面全部失效。

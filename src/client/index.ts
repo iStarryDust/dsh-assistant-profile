@@ -23,6 +23,8 @@ import { createProfileStore } from './store.ts'
 import { mountNameplate } from './nameplate.ts'
 import { MemorySection } from './MemorySection.tsx'
 import { MemoryActions } from './MemoryActions.tsx'
+import { DeleteSessionDialog, DeleteSessionMenuItem } from './DeleteSession.tsx'
+import { requestDelete } from './delete.ts'
 import { requestRemember } from './remember.ts'
 import { MemorySettingsController, type MemoryConfig } from './memoryStore.ts'
 import { en, zh, type ProfileKey } from './locales.ts'
@@ -81,6 +83,26 @@ export function apply(ctx: ClientContext): void {
   const signalForm = ctx.configForms.get<Record<string, unknown>>(PANEL_ID)
   const controller = new MemorySettingsController(memoryForm)
   ctx.effect(() => () => { controller.dispose() }, 'assistant-profile: memory form')
+
+  // 侧栏会话行菜单里的「删除」：走同一个设置通道信箱，宿主删完发 api-session/removed。
+  // 确认框不能挂在菜单里（菜单一关组件就卸载了），所以单独注册到 shell.overlay。
+  const deleteAction = {
+    deleteSession: (sessionId: string) => requestDelete(signalForm, sessionId),
+  }
+  ctx.slots.inject('sidebar.workspaces.session.menu.item', () => ctx.slots.register({
+    name: 'sidebar.workspaces.session.menu.item',
+    id: 'assistant-profile-delete',
+    // 排在「复制 Session ID」(500) 之后，带分隔线单独一行。
+    order: 600,
+    locale: NS,
+  }, DeleteSessionMenuItem))
+  ctx.slots.inject('shell.overlay', () => ctx.slots.register({
+    name: 'shell.overlay',
+    id: 'assistant-profile-delete-dialog',
+    order: 50,
+    locale: NS,
+    inject: () => deleteAction,
+  }, DeleteSessionDialog))
 
   // 聊天动作行上的「记住」：勾选消息后请宿主用该会话的模型提炼。
   ctx.slots.inject('conversation.chat.assistant-actions', () => ctx.slots.register({
