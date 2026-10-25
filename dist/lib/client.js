@@ -7,6 +7,7 @@ window.__ModuleLoader__.load({
 		let react = require("react");
 		let _deepseek_ai_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 		let react_jsx_runtime = require("react/jsx-runtime");
+		let _deepseek_ai_dsh_client_store = require("@deepseek-ai/dsh-client-store");
 		/** 三个内置人格，顺序即界面顺序。 */
 		const BUILTIN_PERSONAS = [
 			{
@@ -102,13 +103,13 @@ window.__ModuleLoader__.load({
 		];
 		//#endregion
 		//#region \0assistant-css:E:\Plugin\发布版\dsh-assistant-profile\src\client\ProfilePage.module.css.mjs
-		const css = "._2lYP0a_page{box-sizing:border-box;background:var(--dsw-alias-bg-layer-1);min-height:100%;padding:28px 32px 48px;overflow-y:auto}._2lYP0a_section{max-width:720px;color:var(--dsw-alias-label-primary);flex-direction:column;gap:16px;margin:0 auto;display:flex}._2lYP0a_head{flex-direction:column;gap:4px;display:flex}._2lYP0a_title{margin:0;font-size:18px;font-weight:600;line-height:26px}._2lYP0a_intro{color:var(--dsw-alias-label-tertiary);margin:0;font-size:13px;line-height:20px}._2lYP0a_form{border:.5px solid var(--dsw-alias-settings-card-stroke);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-settings-card-fill);flex-direction:column;gap:18px;padding:20px;display:flex}._2lYP0a_row{grid-template-columns:minmax(0,1fr) minmax(0,240px);gap:16px;display:grid}@media (width<=640px){._2lYP0a_row{grid-template-columns:minmax(0,1fr)}}._2lYP0a_field{flex-direction:column;gap:6px;min-width:0;display:flex}._2lYP0a_label{font-size:13px;font-weight:500;line-height:18px}._2lYP0a_hint{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}._2lYP0a_hintWarn{color:var(--dsw-alias-state-warn-label)}._2lYP0a_control{width:100%}._2lYP0a_textareaWrap{position:relative}._2lYP0a_textarea{box-sizing:border-box;border:.5px solid var(--dsw-alias-border-l4);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-layer-1);width:100%;min-height:168px;color:var(--dsw-alias-label-primary);resize:vertical;outline:none;padding:9px 12px 26px;font-family:inherit;font-size:13px;line-height:21px;display:block}._2lYP0a_textarea::placeholder{color:var(--dsw-alias-label-dimmed)}._2lYP0a_textarea:focus-visible{border-color:var(--dsw-alias-state-business-primary)}._2lYP0a_counter{color:var(--dsw-alias-label-tertiary);pointer-events:none;font-size:11px;line-height:14px;position:absolute;bottom:8px;right:10px}._2lYP0a_counter[data-long=true]{color:var(--dsw-alias-state-warn-label)}._2lYP0a_status{color:var(--dsw-alias-label-tertiary);margin:0;font-size:12px;line-height:18px}._2lYP0a_statusError{color:var(--dsw-alias-state-error-primary)}._2lYP0a_footer{align-items:center;gap:10px;padding-top:2px;display:flex}._2lYP0a_presets{scrollbar-width:thin;flex:1;align-items:center;gap:6px;min-width:0;padding:2px 0;display:flex;overflow-x:auto}._2lYP0a_chip{border:.5px solid var(--dsw-alias-border-l3);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:999px;flex:none;padding:3px 10px;font-size:12px;line-height:18px;transition:background .12s,border-color .12s,color .12s}._2lYP0a_chip:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_chip:disabled{cursor:default;opacity:.55}._2lYP0a_chipActive{border-color:var(--dsw-static-neutral-bluish-400);background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary)}._2lYP0a_custom{border:.5px solid var(--dsw-alias-border-l3);background:0 0;border-radius:999px;flex:none;align-items:center;transition:background .12s,border-color .12s;display:inline-flex}._2lYP0a_custom:hover{background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_custom ._2lYP0a_chip{border:none;border-radius:999px 0 0 999px;padding-right:4px}._2lYP0a_customDelete{color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;border-radius:0 999px 999px 0;padding:3px 8px 3px 2px;font-size:13px;line-height:18px}._2lYP0a_customDelete:hover:not(:disabled){color:var(--dsw-alias-state-error-primary)}._2lYP0a_customDelete:disabled{cursor:default;opacity:.55}._2lYP0a_nameplate{box-sizing:border-box;color:var(--dsw-alias-label-primary);flex:none;justify-content:center;margin:12px 2px 0;padding:0 10px 8px;display:flex}._2lYP0a_nameplate[data-collapsed=true],._2lYP0a_nameplate[hidden]{display:none}._2lYP0a_nameplateText{text-align:center;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-size:14px;font-weight:500;line-height:22px;overflow:hidden}";
-		const tagId = "@istarry/dsh-assistant-profile/ProfilePage.module.css";
-		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
+		const css$2 = "._2lYP0a_page{box-sizing:border-box;background:var(--dsw-alias-bg-layer-1);min-height:100%;padding:28px 32px 48px;overflow-y:auto}._2lYP0a_section{max-width:720px;color:var(--dsw-alias-label-primary);flex-direction:column;gap:16px;margin:0 auto;display:flex}._2lYP0a_head{flex-direction:column;gap:4px;display:flex}._2lYP0a_title{margin:0;font-size:18px;font-weight:600;line-height:26px}._2lYP0a_intro{color:var(--dsw-alias-label-tertiary);margin:0;font-size:13px;line-height:20px}._2lYP0a_form{border:.5px solid var(--dsw-alias-settings-card-stroke);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-settings-card-fill);flex-direction:column;gap:18px;padding:20px;display:flex}._2lYP0a_row{grid-template-columns:minmax(0,1fr) minmax(0,240px);gap:16px;display:grid}@media (width<=640px){._2lYP0a_row{grid-template-columns:minmax(0,1fr)}}._2lYP0a_field{flex-direction:column;gap:6px;min-width:0;display:flex}._2lYP0a_label{font-size:13px;font-weight:500;line-height:18px}._2lYP0a_hint{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}._2lYP0a_hintWarn{color:var(--dsw-alias-state-warn-label)}._2lYP0a_control{width:100%}._2lYP0a_textareaWrap{position:relative}._2lYP0a_textarea{box-sizing:border-box;border:.5px solid var(--dsw-alias-border-l4);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-layer-1);width:100%;min-height:168px;color:var(--dsw-alias-label-primary);resize:vertical;outline:none;padding:9px 12px 26px;font-family:inherit;font-size:13px;line-height:21px;display:block}._2lYP0a_textarea::placeholder{color:var(--dsw-alias-label-dimmed)}._2lYP0a_textarea:focus-visible{border-color:var(--dsw-alias-state-business-primary)}._2lYP0a_counter{color:var(--dsw-alias-label-tertiary);pointer-events:none;font-size:11px;line-height:14px;position:absolute;bottom:8px;right:10px}._2lYP0a_counter[data-long=true]{color:var(--dsw-alias-state-warn-label)}._2lYP0a_status{color:var(--dsw-alias-label-tertiary);margin:0;font-size:12px;line-height:18px}._2lYP0a_statusError{color:var(--dsw-alias-state-error-primary)}._2lYP0a_footer{align-items:center;gap:10px;padding-top:2px;display:flex}._2lYP0a_presets{scrollbar-width:thin;flex:1;align-items:center;gap:6px;min-width:0;padding:2px 0;display:flex;overflow-x:auto}._2lYP0a_chip{border:.5px solid var(--dsw-alias-border-l3);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:999px;flex:none;padding:3px 10px;font-size:12px;line-height:18px;transition:background .12s,border-color .12s,color .12s}._2lYP0a_chip:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_chip:disabled{cursor:default;opacity:.55}._2lYP0a_chipActive{border-color:var(--dsw-static-neutral-bluish-400);background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary)}._2lYP0a_custom{border:.5px solid var(--dsw-alias-border-l3);background:0 0;border-radius:999px;flex:none;align-items:center;transition:background .12s,border-color .12s;display:inline-flex}._2lYP0a_custom:hover{background:var(--dsw-alias-interactive-bg-hover)}._2lYP0a_custom ._2lYP0a_chip{border:none;border-radius:999px 0 0 999px;padding-right:4px}._2lYP0a_customDelete{color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;border-radius:0 999px 999px 0;padding:3px 8px 3px 2px;font-size:13px;line-height:18px}._2lYP0a_customDelete:hover:not(:disabled){color:var(--dsw-alias-state-error-primary)}._2lYP0a_customDelete:disabled{cursor:default;opacity:.55}._2lYP0a_nameplate{box-sizing:border-box;color:var(--dsw-alias-label-primary);flex:none;justify-content:center;margin:12px 2px 0;padding:0 10px 8px;display:flex}._2lYP0a_nameplate[data-collapsed=true],._2lYP0a_nameplate[hidden]{display:none}._2lYP0a_nameplateText{text-align:center;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-size:14px;font-weight:500;line-height:22px;overflow:hidden}";
+		const tagId$2 = "@istarry/dsh-assistant-profile/ProfilePage.module.css";
+		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId$2) + "]") === null) {
 			const tag = document.createElement("style");
 			tag.dataset.plugin = "@istarry/dsh-assistant-profile";
-			tag.dataset.pluginCss = tagId;
-			tag.textContent = css;
+			tag.dataset.pluginCss = tagId$2;
+			tag.textContent = css$2;
 			document.head.appendChild(tag);
 		}
 		var ProfilePage_module_css_default = {
@@ -678,6 +679,599 @@ window.__ModuleLoader__.load({
 			};
 		}
 		//#endregion
+		//#region \0assistant-css:E:\Plugin\发布版\dsh-assistant-profile\src\client\MemorySection.module.css.mjs
+		const css$1 = "._26v_lW_page{flex-direction:column;gap:18px;padding:4px 0 24px;display:flex}._26v_lW_title{margin:0;font-size:16px;font-weight:600}._26v_lW_intro{opacity:.72;margin:0;font-size:13px;line-height:1.6}._26v_lW_group{border:1px solid var(--dsw-alias-border-l1);border-radius:10px;flex-direction:column;gap:10px;padding:14px;display:flex}._26v_lW_groupHead{margin:0;font-size:13px;font-weight:600}._26v_lW_row{justify-content:space-between;align-items:center;gap:16px;padding:6px 0;display:flex}._26v_lW_rowText{flex-direction:column;gap:3px;display:flex}._26v_lW_rowTitle{font-size:13px}._26v_lW_rowDesc{opacity:.62;margin:0;font-size:12px;line-height:1.5}._26v_lW_switch{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-interactive-bg-default);cursor:pointer;border-radius:11px;flex:none;width:38px;height:22px;padding:0;transition:background .15s;position:relative}._26v_lW_switch:disabled{opacity:.45;cursor:not-allowed}._26v_lW_on{background:var(--dsw-static-deepseek-500,#4d6bfe);border-color:#0000}._26v_lW_knob{background:#fff;border-radius:50%;width:16px;height:16px;transition:transform .15s;position:absolute;top:2px;left:2px}._26v_lW_on ._26v_lW_knob{transform:translate(16px)}._26v_lW_editorHead{justify-content:space-between;align-items:baseline;display:flex}._26v_lW_textarea{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-base);width:100%;color:inherit;resize:vertical;border-radius:8px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.6}._26v_lW_actions{flex-wrap:wrap;align-items:center;gap:10px;display:flex}._26v_lW_primary,._26v_lW_secondary{cursor:pointer;border-radius:7px;padding:5px 14px;font-size:12px}._26v_lW_primary{background:var(--dsw-static-deepseek-500,#4d6bfe);color:#fff;border:1px solid #0000}._26v_lW_secondary{border:1px solid var(--dsw-alias-border-l1);color:inherit;background:0 0}._26v_lW_primary:disabled,._26v_lW_secondary:disabled{opacity:.45;cursor:not-allowed}._26v_lW_link{color:var(--dsw-static-deepseek-500,#4d6bfe);cursor:pointer;background:0 0;border:none;padding:0;font-size:12px}._26v_lW_ok{color:var(--dsw-static-deepseek-500,#4d6bfe);font-size:12px}._26v_lW_error{color:#d33;margin:0;font-size:12px}._26v_lW_overlay{z-index:60;background:#00000059;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._26v_lW_dialog{background:var(--dsw-alias-bg-overlay,#fff);border-radius:12px;flex-direction:column;gap:12px;width:min(560px,92vw);max-height:84vh;padding:18px;display:flex;overflow:auto;box-shadow:0 12px 40px #00000038}._26v_lW_dialogTitle{margin:0;font-size:14px;font-weight:600}";
+		const tagId$1 = "@istarry/dsh-assistant-profile/MemorySection.module.css";
+		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId$1) + "]") === null) {
+			const tag = document.createElement("style");
+			tag.dataset.plugin = "@istarry/dsh-assistant-profile";
+			tag.dataset.pluginCss = tagId$1;
+			tag.textContent = css$1;
+			document.head.appendChild(tag);
+		}
+		var MemorySection_module_css_default = {
+			"actions": "_26v_lW_actions",
+			"dialog": "_26v_lW_dialog",
+			"dialogTitle": "_26v_lW_dialogTitle",
+			"editorHead": "_26v_lW_editorHead",
+			"error": "_26v_lW_error",
+			"group": "_26v_lW_group",
+			"groupHead": "_26v_lW_groupHead",
+			"intro": "_26v_lW_intro",
+			"knob": "_26v_lW_knob",
+			"link": "_26v_lW_link",
+			"ok": "_26v_lW_ok",
+			"on": "_26v_lW_on",
+			"overlay": "_26v_lW_overlay",
+			"page": "_26v_lW_page",
+			"primary": "_26v_lW_primary",
+			"row": "_26v_lW_row",
+			"rowDesc": "_26v_lW_rowDesc",
+			"rowText": "_26v_lW_rowText",
+			"rowTitle": "_26v_lW_rowTitle",
+			"secondary": "_26v_lW_secondary",
+			"switch": "_26v_lW_switch",
+			"textarea": "_26v_lW_textarea",
+			"title": "_26v_lW_title"
+		};
+		//#endregion
+		//#region ../src/client/MemorySection.tsx
+		/**
+		* 「Agent记忆」设置页。
+		*
+		* 两块：两个互锁的开关，一个记忆编辑框。全部走设置通道，保存即落盘。
+		* 「从聊天记录提炼」不在这里——它在聊天消息的动作行上，属于另一件事。
+		*
+		* @module @istarry/dsh-assistant-profile/client/MemorySection
+		*/
+		/** 渲染设置页。 */
+		function MemorySection({ useMemorySection, toggle, setDraft, save, t }) {
+			const state = useMemorySection((value) => value);
+			const [busy, setBusy] = (0, react.useState)(null);
+			const ready = state.status === "ready";
+			const memoryOn = state.config.memoryEnabled;
+			const { saveState, error } = state;
+			const flip = (field, next) => {
+				setBusy(field);
+				toggle(field, next).finally(() => {
+					setBusy(null);
+				});
+			};
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("section", {
+				className: MemorySection_module_css_default.page,
+				children: [
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("h2", {
+						className: MemorySection_module_css_default.title,
+						children: t("memory.nav")
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("p", {
+						className: MemorySection_module_css_default.intro,
+						children: t("memory.intro")
+					}),
+					state.status === "unavailable" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("p", {
+						className: MemorySection_module_css_default.error,
+						role: "alert",
+						children: t("memory.unavailable")
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+						className: MemorySection_module_css_default.group,
+						children: [
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("h3", {
+								className: MemorySection_module_css_default.groupHead,
+								children: t("memory.switches")
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+								className: MemorySection_module_css_default.row,
+								children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: MemorySection_module_css_default.rowText,
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: MemorySection_module_css_default.rowTitle,
+										children: t("memory.enabled.title")
+									}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: MemorySection_module_css_default.rowDesc,
+										children: t("memory.enabled.description")
+									})]
+								}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+									type: "button",
+									role: "switch",
+									"aria-checked": memoryOn,
+									"aria-label": t("memory.enabled.title"),
+									className: memoryOn ? `${MemorySection_module_css_default.switch} ${MemorySection_module_css_default.on}` : MemorySection_module_css_default.switch,
+									disabled: !ready || busy === "memoryEnabled",
+									onClick: () => {
+										flip("memoryEnabled", !memoryOn);
+									},
+									children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: MemorySection_module_css_default.knob })
+								})]
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+								className: MemorySection_module_css_default.row,
+								children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: MemorySection_module_css_default.rowText,
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: MemorySection_module_css_default.rowTitle,
+										children: t("memory.auto.title")
+									}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: MemorySection_module_css_default.rowDesc,
+										children: memoryOn ? t("memory.auto.description") : t("memory.auto.locked")
+									})]
+								}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+									type: "button",
+									role: "switch",
+									"aria-checked": state.config.autoMemory,
+									"aria-label": t("memory.auto.title"),
+									className: state.config.autoMemory ? `${MemorySection_module_css_default.switch} ${MemorySection_module_css_default.on}` : MemorySection_module_css_default.switch,
+									disabled: !ready || !memoryOn || busy === "autoMemory",
+									onClick: () => {
+										flip("autoMemory", !state.config.autoMemory);
+									},
+									children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: MemorySection_module_css_default.knob })
+								})]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+						className: MemorySection_module_css_default.group,
+						children: [
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("h3", {
+								className: MemorySection_module_css_default.groupHead,
+								children: t("memory.editor")
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("p", {
+								className: MemorySection_module_css_default.rowDesc,
+								children: t("memory.editor.hint")
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("textarea", {
+								className: MemorySection_module_css_default.textarea,
+								value: state.draft,
+								placeholder: t("memory.editor.placeholder"),
+								rows: 12,
+								disabled: !ready || saveState === "saving",
+								onChange: (event) => {
+									setDraft(event.target.value);
+								}
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+								className: MemorySection_module_css_default.actions,
+								children: [
+									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+										type: "button",
+										className: MemorySection_module_css_default.primary,
+										disabled: !ready || saveState === "saving",
+										onClick: () => {
+											save();
+										},
+										children: saveState === "saving" ? t("memory.saving") : t("memory.save")
+									}),
+									saveState === "saved" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: MemorySection_module_css_default.ok,
+										role: "status",
+										children: t("memory.saved")
+									}),
+									saveState === "failed" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: MemorySection_module_css_default.error,
+										role: "alert",
+										children: error ?? t("memory.saveFailed")
+									})
+								]
+							})
+						]
+					})
+				]
+			});
+		}
+		//#endregion
+		//#region \0assistant-css:E:\Plugin\发布版\dsh-assistant-profile\src\client\MemoryActions.module.css.mjs
+		const css = ".BvVp9q_action{width:calc(28px + var(--dsh-content-font-delta,0px));height:calc(28px + var(--dsh-content-font-delta,0px));border-radius:var(--dsw-radius-sm);color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;justify-content:center;align-items:center;padding:6px;display:inline-flex}.BvVp9q_action svg{width:calc(15px + var(--dsh-content-font-delta,0px));height:calc(15px + var(--dsh-content-font-delta,0px))}.BvVp9q_action:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-secondary)}.BvVp9q_note{color:var(--dsw-alias-label-tertiary);padding-left:4px;font-size:12px;line-height:20px}.BvVp9q_list{flex-direction:column;gap:2px;max-height:min(52vh,460px);margin:-4px -4px 0;padding:4px;display:flex;overflow-y:auto}.BvVp9q_row{border-radius:var(--dsw-radius-sm);cursor:pointer;align-items:flex-start;gap:8px;padding:7px 8px;display:flex}.BvVp9q_row:hover{background:var(--dsw-alias-interactive-bg-hover)}.BvVp9q_rowChecked{background:var(--dsw-alias-bg-module-platform)}.BvVp9q_check{accent-color:var(--dsw-alias-state-business-primary);flex:none;margin:3px 0 0}.BvVp9q_side{background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-tertiary);white-space:nowrap;border-radius:999px;flex:none;padding:1px 6px;font-size:11px;line-height:17px}.BvVp9q_preview{min-width:0;color:var(--dsw-alias-label-primary);overflow-wrap:anywhere;font-size:13px;line-height:20px}.BvVp9q_empty{color:var(--dsw-alias-label-tertiary);text-align:center;padding:18px 8px;font-size:13px;line-height:20px}.BvVp9q_error{color:var(--dsw-alias-state-error-primary);margin-right:auto;font-size:12px;line-height:18px}";
+		const tagId = "@istarry/dsh-assistant-profile/MemoryActions.module.css";
+		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
+			const tag = document.createElement("style");
+			tag.dataset.plugin = "@istarry/dsh-assistant-profile";
+			tag.dataset.pluginCss = tagId;
+			tag.textContent = css;
+			document.head.appendChild(tag);
+		}
+		var MemoryActions_module_css_default = {
+			"action": "BvVp9q_action",
+			"check": "BvVp9q_check",
+			"empty": "BvVp9q_empty",
+			"error": "BvVp9q_error",
+			"list": "BvVp9q_list",
+			"note": "BvVp9q_note",
+			"preview": "BvVp9q_preview",
+			"row": "BvVp9q_row",
+			"rowChecked": "BvVp9q_rowChecked",
+			"side": "BvVp9q_side"
+		};
+		//#endregion
+		//#region ../src/client/MemoryActions.tsx
+		/**
+		* 聊天里的「记住」：助理消息动作行上的一个按钮 + 一个勾选弹窗。
+		*
+		* 勾中的消息会按时间顺序拼成「用户：…／助手：…」的文本，交给宿主提炼成长期记忆。
+		* 按钮本身不写任何东西：只有人勾选并提交，才会产生一次提炼。
+		*
+		* @module @istarry/dsh-assistant-profile/client/MemoryActions
+		*/
+		/**
+		* 从助手消息的块里取正文。
+		* @param blocks - 消息块。
+		* @returns 拼起来的正文。
+		*/
+		function assistantText(blocks) {
+			return blocks.flatMap((block) => (block.kind === "text" || block.type === "text") && typeof block.text === "string" ? [block.text] : []).join("");
+		}
+		/**
+		* 从用户消息的内容里取正文。
+		* @param content - 消息内容块。
+		* @returns 拼起来的正文。
+		*/
+		function contentText(content) {
+			return content.flatMap((block) => block.type === "text" && typeof block.text === "string" ? [block.text] : []).join("");
+		}
+		/**
+		* 压成一行摘要。
+		* @param text - 原文。
+		* @param limit - 字数上限。
+		* @returns 摘要。
+		*/
+		function preview(text, limit = 120) {
+			const trimmed = text.replace(/\s+/g, " ").trim();
+			return trimmed.length <= limit ? trimmed : `${trimmed.slice(0, limit)}…`;
+		}
+		/**
+		* 从会话快照里挑出可提炼的消息：用户消息与已完成的助手消息，按时间线排序。
+		* 运行中的回复、工具行、命令与上下文快照都没有可复用的正文，跳过。
+		* @param snapshot - 当前会话的聊天快照。
+		* @returns 候选列表。
+		*/
+		function candidatesOf(snapshot) {
+			const store = snapshot?.nodes;
+			const nodes = store === void 0 || store === null ? [] : typeof store.values === "function" ? store.values() : store instanceof Map ? [...store.values()] : Object.values(store);
+			const list = [];
+			for (const raw of nodes) {
+				if (typeof raw !== "object" || raw === null) continue;
+				const node = raw;
+				const key = node.key ?? node.id;
+				if (key === void 0) continue;
+				if (node.visibility === "hidden") continue;
+				const anchorSeq = typeof node.anchorSeq === "number" ? node.anchorSeq : 0;
+				if (node.kind === "user" || node.kind === "steering") {
+					const content = node.data?.content ?? [];
+					const text = Array.isArray(content) ? contentText(content) : "";
+					if (text.trim() === "") continue;
+					list.push({
+						key,
+						anchorSeq,
+						side: "user",
+						preview: preview(text),
+						text
+					});
+					continue;
+				}
+				if (node.kind === "assistant-step") {
+					if (node.data?.status === "running") continue;
+					const blocks = node.data?.blocks ?? [];
+					const text = Array.isArray(blocks) ? assistantText(blocks) : "";
+					if (text.trim() === "") continue;
+					list.push({
+						key,
+						anchorSeq,
+						side: "assistant",
+						preview: preview(text),
+						text
+					});
+				}
+			}
+			return list.sort((left, right) => left.anchorSeq - right.anchorSeq);
+		}
+		/**
+		* 动作行上的「记住」入口，以及提交成功后的短暂提示。
+		* @param props - 注入的提炼动作与会话运行时。
+		* @returns 按钮与可能展开的弹窗。
+		*/
+		function MemoryActions({ useChat, remember, t }) {
+			const [open, setOpen] = (0, react.useState)(false);
+			const [note, setNote] = (0, react.useState)(null);
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
+					label: t("remember.action"),
+					side: "bottom",
+					children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+						type: "button",
+						className: MemoryActions_module_css_default.action,
+						"aria-label": t("remember.action"),
+						onClick: () => {
+							setNote(null);
+							setOpen(true);
+						},
+						children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconSparkleRegular, {})
+					})
+				}),
+				note !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+					className: MemoryActions_module_css_default.note,
+					role: "status",
+					children: note
+				}),
+				open && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(MemoryDialog, {
+					useChat,
+					remember,
+					t,
+					onClose: (saved) => {
+						setOpen(false);
+						if (saved) setNote(t("remember.saved"));
+					}
+				})
+			] });
+		}
+		/**
+		* 消息勾选弹窗。
+		* @param props - 会话选择器、提炼动作与文案。
+		* @returns 弹窗元素。
+		*/
+		function MemoryDialog({ useChat, remember, onClose, t }) {
+			const snapshot = useChat((state) => state);
+			const candidates = (0, react.useMemo)(() => candidatesOf(snapshot), [snapshot]);
+			const [checked, setChecked] = (0, react.useState)(/* @__PURE__ */ new Set());
+			const [busy, setBusy] = (0, react.useState)(false);
+			const [error, setError] = (0, react.useState)(null);
+			const toggle = (key) => {
+				const next = new Set(checked);
+				if (next.has(key)) next.delete(key);
+				else next.add(key);
+				setChecked(next);
+			};
+			/** 把宿主的结果原因翻成界面文案。 */
+			const outcomeText = (outcome) => {
+				if (outcome === "session not open") return t("remember.notOpen");
+				if (outcome === "no provider/model available") return t("remember.noModel");
+				if (outcome === "empty selection" || outcome === "nothing worth remembering") return t("remember.nothing");
+				if (outcome === "timed out") return t("remember.timeout");
+				if (outcome === "settings write refused") return t("remember.refused");
+				return outcome === "" ? t("remember.failed") : outcome;
+			};
+			const submit = async () => {
+				if (busy) return;
+				const text = candidates.filter((item) => checked.has(item.key)).map((item) => `${item.side === "user" ? t("remember.side.user") : t("remember.side.assistant")}：${item.text}`).join("\n\n");
+				if (text.trim() === "") return;
+				setBusy(true);
+				setError(null);
+				try {
+					const result = await remember(text);
+					if (result.saved) {
+						onClose(true);
+						return;
+					}
+					setError(outcomeText(result.outcome));
+				} catch (caught) {
+					setError(caught instanceof Error ? caught.message : t("remember.failed"));
+				} finally {
+					setBusy(false);
+				}
+			};
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
+				open: true,
+				onClose: () => {
+					if (!busy) onClose(false);
+				},
+				closeLabel: t("remember.cancel"),
+				title: t("remember.title"),
+				description: t("remember.subtitle"),
+				footer: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [
+					error !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+						className: MemoryActions_module_css_default.error,
+						role: "alert",
+						children: error
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+						variant: "outline",
+						disabled: busy,
+						onClick: () => {
+							onClose(false);
+						},
+						children: t("remember.cancel")
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+						variant: "primary",
+						disabled: busy || checked.size === 0,
+						onClick: () => {
+							submit();
+						},
+						children: busy ? t("remember.submitting") : t("remember.submit")
+					})
+				] }),
+				children: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+					className: MemoryActions_module_css_default.list,
+					children: [candidates.length === 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+						className: MemoryActions_module_css_default.empty,
+						children: t("remember.empty")
+					}), candidates.map((item) => {
+						const active = checked.has(item.key);
+						return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+							className: active ? `${MemoryActions_module_css_default.row} ${MemoryActions_module_css_default.rowChecked}` : MemoryActions_module_css_default.row,
+							children: [
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
+									type: "checkbox",
+									className: MemoryActions_module_css_default.check,
+									checked: active,
+									onChange: () => {
+										toggle(item.key);
+									}
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: MemoryActions_module_css_default.side,
+									children: item.side === "user" ? t("remember.side.user") : t("remember.side.assistant")
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: MemoryActions_module_css_default.preview,
+									children: item.preview
+								})
+							]
+						}, item.key);
+					})]
+				})
+			});
+		}
+		//#endregion
+		//#region ../src/client/remember.ts
+		/** 信箱字段名。 */
+		const SIGNAL_FIELD = "rememberSignal";
+		/** 等结果的上限：提炼是一次完整模型调用，给足时间。 */
+		const TIMEOUT_MS = 12e4;
+		/** 一次请求最多带多少字符，与宿主的截断保持一致。 */
+		const TEXT_LIMIT = 2e4;
+		/**
+		* 解析信箱字段。
+		* @param value - 字段原文。
+		* @returns 解析结果；坏数据当空。
+		*/
+		function parseSignal(value) {
+			if (typeof value !== "string" || value.trim() === "") return void 0;
+			try {
+				const parsed = JSON.parse(value);
+				if (typeof parsed !== "object" || parsed === null) return void 0;
+				return parsed;
+			} catch {
+				return;
+			}
+		}
+		/**
+		* 投递一次提炼请求并等待宿主回话。
+		* @param form - 本插件的设置表（`rememberSignal` 所在的命名空间）。
+		* @param sessionId - 用哪个会话的模型跑这次提炼。
+		* @param text - 选中的对话文本（已带「用户：/助手：」前缀）。
+		* @returns 提炼结果；超时或被拒绝时给失败结果。
+		*/
+		async function requestRemember(form, sessionId, text) {
+			const id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+			const request = JSON.stringify({
+				id,
+				phase: "request",
+				sessionId,
+				text: text.slice(0, TEXT_LIMIT)
+			});
+			if (!await form.set(SIGNAL_FIELD, request)) return {
+				saved: false,
+				outcome: "settings write refused"
+			};
+			return await new Promise((resolve) => {
+				let settled = false;
+				let timer;
+				let unsubscribe = () => {};
+				const finish = (value) => {
+					if (settled) return;
+					settled = true;
+					if (timer !== void 0) clearTimeout(timer);
+					unsubscribe();
+					resolve(value);
+				};
+				const check = () => {
+					const signal = parseSignal(form.getSnapshot().value?.[SIGNAL_FIELD]);
+					if (signal?.phase !== "done" || signal.id !== id) return;
+					finish({
+						saved: signal.saved === true,
+						...signal.entries === void 0 ? {} : { entries: signal.entries },
+						outcome: signal.outcome ?? ""
+					});
+				};
+				unsubscribe = form.subscribe(check);
+				timer = setTimeout(() => {
+					finish({
+						saved: false,
+						outcome: "timed out"
+					});
+				}, TIMEOUT_MS);
+				check();
+			});
+		}
+		//#endregion
+		//#region ../src/client/memoryStore.ts
+		/** 把持久化配置解码成三个字段（形状不对时给安全默认值）。 */
+		function decodeConfig(section) {
+			const source = typeof section === "object" && section !== null && !Array.isArray(section) ? section : {};
+			return {
+				memoryEnabled: source.memoryEnabled === true,
+				autoMemory: source.autoMemory === true,
+				memoryText: typeof source.memoryText === "string" ? source.memoryText : ""
+			};
+		}
+		/** 设置页控制器（每个浏览器页面一个）。 */
+		var MemorySettingsController = class {
+			form;
+			store = (0, _deepseek_ai_dsh_client_store.createSnapshotStore)({
+				status: "loading",
+				config: decodeConfig(void 0),
+				draft: "",
+				saveState: "idle",
+				error: null
+			});
+			unsubscribe;
+			/**
+			* @param form - 本插件在设置通道里的配置表。
+			*/
+			constructor(form) {
+				this.form = form;
+				this.unsubscribe = form.subscribe(() => {
+					this.derive();
+				});
+				this.derive();
+			}
+			/** 释放订阅。 */
+			dispose() {
+				this.unsubscribe();
+			}
+			/** 切换一个开关。 */
+			async toggle(field, next) {
+				await this.form.set(field, next);
+			}
+			/** 更新编辑框草稿（保存前不写配置）。 */
+			setDraft(text) {
+				const snapshot = this.store.getSnapshot();
+				this.store.set({
+					...snapshot,
+					draft: text,
+					saveState: "idle",
+					error: null
+				});
+			}
+			/** 保存草稿到 memoryText。 */
+			async save() {
+				const snapshot = this.store.getSnapshot();
+				this.store.set({
+					...snapshot,
+					saveState: "saving",
+					error: null
+				});
+				try {
+					await this.form.set("memoryText", snapshot.draft);
+					this.store.set({
+						...this.store.getSnapshot(),
+						saveState: "saved"
+					});
+				} catch (error) {
+					this.store.set({
+						...this.store.getSnapshot(),
+						saveState: "failed",
+						error: error instanceof Error ? error.message : String(error)
+					});
+				}
+			}
+			/** 把配置快照映射进页面状态；用户没在编辑时，草稿跟着配置走。 */
+			derive() {
+				const snapshot = this.form.getSnapshot();
+				const config = decodeConfig(snapshot.value);
+				const current = this.store.getSnapshot();
+				const dirty = current.draft !== current.config.memoryText && current.saveState !== "saved";
+				this.store.set({
+					status: snapshot.status === "ready" ? "ready" : snapshot.status === "loading" ? "loading" : "unavailable",
+					config,
+					draft: dirty ? current.draft : config.memoryText,
+					saveState: snapshot.status === "ready" ? current.saveState : "idle",
+					error: current.error
+				});
+			}
+		};
+		//#endregion
 		//#region ../src/client/locales.ts
 		/**
 		* 词典：助理档案页与侧栏入口的文案。
@@ -713,7 +1307,39 @@ window.__ModuleLoader__.load({
 			"dirty": "有未保存的改动",
 			"failed": "保存失败",
 			"unavailable": "设置通道还没就绪，稍后再试。",
-			"readonly": "当前 profile 不可写。"
+			"readonly": "当前 profile 不可写。",
+			"memory.nav": "Agent记忆",
+			"memory.intro": "这份记忆跟着人格走：注入到系统提示里，所有会话共享。可以自己写，也可以从聊天记录里提炼。",
+			"memory.unavailable": "设置通道还没就绪，稍后再试。",
+			"memory.switches": "开关",
+			"memory.enabled.title": "启用记忆",
+			"memory.enabled.description": "把下面这份记忆注入系统提示。关掉后记忆不生效，也不会被写入。",
+			"memory.auto.title": "自动记忆",
+			"memory.auto.description": "允许模型在对话中自己判断该记什么，并直接写入。",
+			"memory.auto.locked": "先启用记忆，才能打开自动记忆。",
+			"memory.editor": "记忆内容",
+			"memory.editor.hint": "每行一条，格式「- [时间] 内容」；也可以写普通段落，模型照样会读到。",
+			"memory.editor.placeholder": "- [2026-10-24 12:00] 用户偏好简洁的中文回答",
+			"memory.save": "保存记忆",
+			"memory.saving": "保存中…",
+			"memory.saved": "已保存",
+			"memory.saveFailed": "保存失败",
+			"remember.action": "记住",
+			"remember.title": "记进长期记忆",
+			"remember.subtitle": "勾选要提炼的消息，模型会把它们压成几条稳定的事实，追加到助理记忆里。",
+			"remember.submit": "提炼并记住",
+			"remember.submitting": "提炼中…",
+			"remember.cancel": "取消",
+			"remember.empty": "这个会话还没有可提炼的消息。",
+			"remember.saved": "已记住",
+			"remember.failed": "没能记住",
+			"remember.side.user": "用户",
+			"remember.side.assistant": "助手",
+			"remember.notOpen": "会话不在线，先回到这个会话再试。",
+			"remember.noModel": "取不到这个会话的模型配置。",
+			"remember.nothing": "这段没有值得记住的内容。",
+			"remember.timeout": "等太久了，没收到结果。",
+			"remember.refused": "设置通道拒绝了这次请求。"
 		};
 		/** 英文词典：与中文键一一对应。 */
 		const en = {
@@ -743,7 +1369,39 @@ window.__ModuleLoader__.load({
 			"dirty": "Unsaved changes",
 			"failed": "Save failed",
 			"unavailable": "The settings channel is not ready yet; try again in a moment.",
-			"readonly": "This profile is read-only."
+			"readonly": "This profile is read-only.",
+			"memory.nav": "Agent Memory",
+			"memory.intro": "This memory belongs to the persona: it is injected into the system prompt and shared by every session. Write it yourself, or distill it from a chat.",
+			"memory.unavailable": "The settings channel is not ready yet; try again in a moment.",
+			"memory.switches": "Switches",
+			"memory.enabled.title": "Enable memory",
+			"memory.enabled.description": "Inject the memory below into the system prompt. Turned off, it neither applies nor gets written.",
+			"memory.auto.title": "Automatic memory",
+			"memory.auto.description": "Let the model decide what is worth remembering and write it directly.",
+			"memory.auto.locked": "Enable memory first to turn on automatic memory.",
+			"memory.editor": "Memory content",
+			"memory.editor.hint": "One entry per line, in the shape \"- [time] content\"; plain prose works too, the model reads all of it.",
+			"memory.editor.placeholder": "- [2026-10-24 12:00] Prefers concise Chinese answers",
+			"memory.save": "Save memory",
+			"memory.saving": "Saving…",
+			"memory.saved": "Saved",
+			"memory.saveFailed": "Save failed",
+			"remember.action": "Remember",
+			"remember.title": "Remember into long-term memory",
+			"remember.subtitle": "Tick the messages to distil; the model condenses them into a few stable facts and appends them to the assistant memory.",
+			"remember.submit": "Distil and remember",
+			"remember.submitting": "Distilling…",
+			"remember.cancel": "Cancel",
+			"remember.empty": "This session has no messages to distil yet.",
+			"remember.saved": "Remembered",
+			"remember.failed": "Could not remember",
+			"remember.side.user": "User",
+			"remember.side.assistant": "Assistant",
+			"remember.notOpen": "This session is not open any more.",
+			"remember.noModel": "No model configuration for this session.",
+			"remember.nothing": "Nothing worth remembering here.",
+			"remember.timeout": "Timed out waiting for the result.",
+			"remember.refused": "The settings channel refused the request."
 		};
 		//#endregion
 		//#region ../src/client/index.ts
@@ -784,6 +1442,35 @@ window.__ModuleLoader__.load({
 				locale: NS,
 				inject: () => ({ profile })
 			}, ProfilePage));
+			const memoryForm = ctx.configForms.get(PANEL_ID);
+			const signalForm = ctx.configForms.get(PANEL_ID);
+			const controller = new MemorySettingsController(memoryForm);
+			ctx.effect(() => () => {
+				controller.dispose();
+			}, "assistant-profile: memory form");
+			ctx.slots.inject("conversation.chat.assistant-actions", () => ctx.slots.register({
+				name: "conversation.chat.assistant-actions",
+				id: "assistant-profile-remember",
+				order: 20,
+				locale: NS,
+				inject: (sessionId) => ({ remember: (text) => requestRemember(signalForm, String(sessionId ?? ""), text) })
+			}, MemoryActions));
+			ctx.slots.inject("settings.section", () => ctx.slots.register({
+				name: "settings.section",
+				id: "assistant-memory",
+				order: 26,
+				label: () => t("memory.nav"),
+				locale: NS,
+				inject: () => ({
+					hooks: { memorySection: controller.store },
+					toggle: (field, next) => controller.toggle(field, next),
+					setDraft: (text) => {
+						controller.setDraft(text);
+					},
+					save: () => controller.save(),
+					load: () => controller.load()
+				})
+			}, MemorySection));
 		}
 		//#endregion
 		exports.apply = apply;

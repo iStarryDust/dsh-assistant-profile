@@ -21,6 +21,10 @@ import { ProfilePage } from './ProfilePage.tsx'
 import { ProfilePanelIcon } from './ProfilePanelIcon.tsx'
 import { createProfileStore } from './store.ts'
 import { mountNameplate } from './nameplate.ts'
+import { MemorySection } from './MemorySection.tsx'
+import { MemoryActions } from './MemoryActions.tsx'
+import { requestRemember } from './remember.ts'
+import { MemorySettingsController, type MemoryConfig } from './memoryStore.ts'
 import { en, zh, type ProfileKey } from './locales.ts'
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {
@@ -50,6 +54,7 @@ export function apply(ctx: ClientContext): void {
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'assistant-profile: dictionaries')
   const t = ctx.locale.bind(NS)
 
+  // 本包自己产出的 Remote 贡献：在这里挂载，不依赖部署侧的共享装配。
   const profile = createProfileStore(ctx)
   ctx.effect(() => mountNameplate(profile), 'assistant-profile: nameplate')
 
@@ -69,4 +74,38 @@ export function apply(ctx: ClientContext): void {
     locale: NS,
     inject: () => ({ profile }),
   }, ProfilePage))
+
+  // 设置页「Agent记忆」与聊天里的「记住」共用同一张配置表：两侧都只走设置通道，
+  // 不引入自定义 RPC（宿主把记忆与信箱都放在 volatile 字段里）。
+  const memoryForm = ctx.configForms.get<MemoryConfig>(PANEL_ID)
+  const signalForm = ctx.configForms.get<Record<string, unknown>>(PANEL_ID)
+  const controller = new MemorySettingsController(memoryForm)
+  ctx.effect(() => () => { controller.dispose() }, 'assistant-profile: memory form')
+
+  // 聊天动作行上的「记住」：勾选消息后请宿主用该会话的模型提炼。
+  ctx.slots.inject('conversation.chat.assistant-actions', () => ctx.slots.register({
+    name: 'conversation.chat.assistant-actions',
+    id: 'assistant-profile-remember',
+    order: 20,
+    locale: NS,
+    inject: (sessionId: string) => ({
+      remember: (text: string) => requestRemember(signalForm, String(sessionId ?? ''), text),
+    }),
+  }, MemoryActions))
+
+  ctx.slots.inject('settings.section', () => ctx.slots.register({
+    name: 'settings.section',
+    id: 'assistant-memory',
+    // 排在档案相关项之后：人格定义「我是谁」，记忆定义「我记得什么」。
+    order: 26,
+    label: () => t('memory.nav'),
+    locale: NS,
+    inject: () => ({
+      hooks: { memorySection: controller.store },
+      toggle: (field: 'memoryEnabled' | 'autoMemory', next: boolean) => controller.toggle(field, next),
+      setDraft: (text: string) => { controller.setDraft(text) },
+      save: () => controller.save(),
+      load: () => controller.load(),
+    }),
+  }, MemorySection))
 }
