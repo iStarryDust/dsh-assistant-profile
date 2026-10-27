@@ -102,8 +102,9 @@ DeepSeek 的上下文缓存是前缀缓存：系统提示在最前面，直接�
 
 ```bash
 dsh plugin --profile <profile> add @istarry/dsh-assistant-profile
-# 本地包：
-dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.2.1.tgz
+# 本地包：先构建，再在 dist/ 里打包
+node build.mjs && (cd dist && npm pack)
+dsh plugin --profile <profile> add ./dist/istarry-dsh-assistant-profile-<version>.tgz
 ```
 
 重启 DSH 后生效。卸载：

@@ -87,8 +87,9 @@ It travels with the profile: another profile is another persona; backing up the 
 
 ```bash
 dsh plugin --profile <profile> add @istarry/dsh-assistant-profile
-# local tarball:
-dsh plugin --profile <profile> add E:/Plugin/发布版/dsh-assistant-profile/dist/istarry-dsh-assistant-profile-0.2.1.tgz
+# local tarball: build first, then pack inside dist/
+node build.mjs && (cd dist && npm pack)
+dsh plugin --profile <profile> add ./dist/istarry-dsh-assistant-profile-<version>.tgz
 ```
 
 Restart DSH. To remove:
