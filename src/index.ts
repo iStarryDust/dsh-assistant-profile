@@ -504,7 +504,7 @@ export default class AssistantProfile extends Service {
         await this.writeMemory(result.text)
         return {
           saved: true,
-          content: result.content,
+          content: trimmed,
           outcome: result.appended ? 'appended' : result.refreshed ? 'refreshed' : 'unchanged',
         }
       },
