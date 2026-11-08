@@ -27,13 +27,17 @@
  * @module @istarry/dsh-assistant-profile
  */
 
-import type { Context, Volatile } from '@deepseek-ai/cordis'
+import type { Context } from '@deepseek-ai/cordis'
+// `Volatile` 从 cosmokit 取：cordis 4.0.1 不导出它（4.1.0 才转出），
+// 而 cosmokit 两版都直接提供——这样同一份源码在旧宿主与新宿主上都能编译。
+import type { Volatile } from '@deepseek-ai/cosmokit'
 import z from '@deepseek-ai/schemastery'
 import { DEFAULT_SCHEMA, Type, load as yamlLoad } from 'js-yaml'
 import { Service } from '@deepseek-ai/cordis'
-// 类型面：设置通道（configure）、系统提示服务、agent 生命周期与预设注册表。
+// 类型面：设置通道（configure）、系统提示服务、工具注册、agent 生命周期与预设注册表。
 import type {} from '@deepseek-ai/dsh-settings'
 import type {} from '@deepseek-ai/dsh-system-prompt'
+import type {} from '@deepseek-ai/dsh-tools'
 import type {} from '@deepseek-ai/dsh-agent'
 import type {} from '@deepseek-ai/dsh-agent-preset-registry'
 
@@ -60,7 +64,27 @@ const MEMORY_ORDER = 500
 /** 人格插件的包名，兼容没有 `id` 的旧写法。 */
 const PERSONA_PLUGIN_NAME = '@deepseek-ai/dsh-persona'
 
-/** 档案字段。 */
+/**
+ * 档案字段的**原始值**形状：schema 接受的东西，全是普通标量，允许缺省与 null。
+ *
+ * schemastery 的 `z<S, T>` 第一个类型参数是「输入」、第二个是「输出」。只写
+ * `z<Config>` 会把输入也当成 `Config`，于是 `Volatile<T>` 与 `T` 对不上——在
+ * schemastery 3.18 / 3.19 上都编译不过（构建用 `tsc --noCheck` 一直没暴露）。
+ */
+export interface ConfigInput {
+  name?: string | null
+  language?: string | null
+  persona?: string | null
+  customsJson?: string | null
+  memoryEnabled?: boolean | null
+  autoMemory?: boolean | null
+  memoryText?: string | null
+  rememberSignal?: string | null
+  deleteSignal?: string | null
+  [key: string]: unknown
+}
+
+/** 档案字段（运行时输出形状）。 */
 export interface Config {
   /** 助理名：进提示词，也是侧栏「新会话」上方的显示名。 */
   name: Volatile<string>
@@ -97,7 +121,7 @@ export interface Config {
  * 而不是插件配置页编辑，改动经设置通道写回 profile 的 patch，重启后仍在。默认值取
  * 内置「默认三」，所以装好就是一条带人设的鱼；三栏全部清空再保存，则什么都不注入。
  */
-export const Config: z<Config> = z.object({
+export const Config: z<ConfigInput, Config> = z.object({
   name: z.string().default(DEFAULT_PERSONA.name).volatile(),
   language: z.string().default(DEFAULT_PERSONA.language).volatile(),
   persona: z.string().default(DEFAULT_PERSONA.persona).volatile(),
@@ -417,12 +441,16 @@ export default class AssistantProfile extends Service {
     }), 'assistant-profile: memory section')
 
     // 人格：每个 agent 创建时装一次；空白会话换模式会重绑作用域，要重新登记。
-    const reinstall = (agent: AgentLike): Promise<void> => installPersona(ctx, agent).catch((error: unknown) => {
-      ctx.logger.warn(`assistant-profile: persona install failed: ${String(error)}`)
-    })
-    ctx.effect(() => ctx.on('agent/created', ({ agent }) => {
-      void reinstall(agent as unknown as AgentLike)
-    }), 'assistant-profile: persona')
+    // `agent/created` 的处理函数必须返回 `Promise<undefined>`（`void` 不被接受），
+    // 所以这里把成功与失败都收敛成 undefined。
+    const reinstall = (agent: AgentLike): Promise<undefined> => installPersona(ctx, agent).then(
+      () => undefined,
+      (error: unknown) => {
+        ctx.logger.warn(`assistant-profile: persona install failed: ${String(error)}`)
+        return undefined
+      },
+    )
+    ctx.effect(() => ctx.on('agent/created', ({ agent }) => reinstall(agent as unknown as AgentLike)), 'assistant-profile: persona')
     ctx.effect(() => ctx.on('agent-preset/selected', (sessionId: string) => {
       const agents = ctx.get('agents') as { get(id: string): AgentLike | undefined } | undefined
       const agent = agents?.get(String(sessionId))
@@ -645,7 +673,9 @@ export default class AssistantProfile extends Service {
     if (agent === undefined) return { saved: false, outcome: 'session not open' }
     const callConfig = agent.session.requestHeader?.()?.config
     if (callConfig === undefined) return { saved: false, outcome: 'no provider/model available' }
-    const llm = this.ctx.llm as {
+    // 这里只用到 stream 的三种 chunk 形状；`GenerateOptions` 的完整签名（provider /
+    // model / messages 必填）与此处的松散调用不重叠，经 unknown 转一次是有意的。
+    const llm = this.ctx.llm as unknown as {
       stream(options: Record<string, unknown>): AsyncIterable<{
         type: string
         text?: string

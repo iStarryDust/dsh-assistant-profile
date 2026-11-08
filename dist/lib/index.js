@@ -2915,12 +2915,10 @@ var AssistantProfile = class extends Service {
 				return config.memoryText.get().trim();
 			}
 		}), "assistant-profile: memory section");
-		const reinstall = (agent) => installPersona(ctx, agent).catch((error) => {
+		const reinstall = (agent) => installPersona(ctx, agent).then(() => void 0, (error) => {
 			ctx.logger.warn(`assistant-profile: persona install failed: ${String(error)}`);
 		});
-		ctx.effect(() => ctx.on("agent/created", ({ agent }) => {
-			reinstall(agent);
-		}), "assistant-profile: persona");
+		ctx.effect(() => ctx.on("agent/created", ({ agent }) => reinstall(agent)), "assistant-profile: persona");
 		ctx.effect(() => ctx.on("agent-preset/selected", (sessionId) => {
 			const agent = ctx.get("agents")?.get(String(sessionId));
 			if (agent !== void 0) reinstall(agent);
